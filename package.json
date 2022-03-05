@@ -4,7 +4,7 @@
   "description": "Quest Game backend",
   "main": "scripts/server.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node scripts/server.js"
   },
   "repository": {
     "type": "git",
