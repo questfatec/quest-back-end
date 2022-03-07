@@ -1,41 +1,22 @@
 //Express - Serviço base
-const express = require("express");
+const express = require("express")
+//Valor fixo 'app' para função express()
+const app = express()
+//HTTP
+const server = require('http').Server(app)
 
 //Cookie-Parser
 const cookieParser = require('cookie-parser')
 
-//Mongoose
-const mongoose = require('mongoose');
-
 //CORS
-const cors = require('cors');
+const cors = require('cors')
 
-//Valor fixo 'app' para função express()
-const app = express();
-
-//HTTP
-const server = require('http').Server(app);
-
-//Reconhecimento dinâmico de porta do servidor ou localhost = 3110
-const PORT = process.env.PORT || 3110;
+//Reconhecimento dinâmico de porta do servidor ou localhost = 5000
+const PORT = process.env.PORT || 5000
 const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT}!`
 
 // Pacote Path - Para publicação
-const path = require('path');
-
-//Conexão com Banco de Dados
-mongoose.connect('mongodb+srv://questgame:TSUlcLFbVFHVOrIw@questcluster.pisx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    
-}, function(err) {
-    if(err){
-        console.log(err)
-    }else{
-        console.log("MongoDB Conectado e disponível para o servidor Node.JS (Quest FATEC)")
-    }    
-})
-
+const path = require('path')
 
 // hard coded configuration object
 const confCors = {
@@ -43,7 +24,7 @@ const confCors = {
     // origin undefined handler
     // see https://github.com/expressjs/cors/issues/71
     originUndefined: function (req, res, next) {
-            next();
+            next()
     },
  
     // Cross Origin Resource Sharing Options
@@ -51,26 +32,42 @@ const confCors = {
         // origin handler
         origin: function (origin, cb) {
             // setup a white list
-            let wl = ['*'];
-            cb(null, true);
+            let wl = ['*']
+            cb(null, true)
         },
         optionsSuccessStatus: 200
     }
- 
-};
+}
 
-app.use(confCors.originUndefined , cors(confCors.cors));
+app.use(confCors.originUndefined , cors(confCors.cors))
 
 app.use(cookieParser())
-app.use(express.json());
+app.use(express.json())
 
-//Rotas
+//Rota Base
 app.get('/', (req,res) => {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('Quest Backend conectado ao banco e online =)');
+  res.writeHead(200, {'Content-Type': 'text/html'})
+  res.end('Bem Vindo ao Quest - Backend conectado ao banco e online =)')
 })
 
+const uri = process.env.mongoDbURI
+
+app.get('/perguntas', (req,res)=>{
+    var busca = { questionTheme: "Tema Teste"}
+
+    var MongoClient = require('mongodb').MongoClient;
+
+    MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
+        if (err) throw err;
+        var dbo = QuestDB.db("QuestDB");
+        dbo.collection("QuestQuestions").find(busca).toArray(function (err, questions) {
+            if (err) throw err;
+            res.send(questions)
+            QuestDB.close(); 
+        })
+    })
+})
 
 server.listen(PORT, () => {
-  console.log(`${msg_PORT}`);
+  console.log(`${msg_PORT}`)
 });
