@@ -1,7 +1,12 @@
 //Express - Serviço base
 const express = require("express")
+
 //Valor fixo 'app' para função express()
 const app = express()
+
+//Body Parser
+const bodyParser = require('body-parser')
+
 //HTTP
 const server = require('http').Server(app)
 
@@ -43,6 +48,7 @@ app.use(confCors.originUndefined , cors(confCors.cors))
 
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.urlencoded({ extended: false}))
 
 //Rota Base
 app.get('/', (req,res) => {
@@ -53,9 +59,12 @@ app.get('/', (req,res) => {
 const uri = process.env.mongoDbURI
 
 app.get('/perguntas', (req,res)=>{
-    var busca = { questionTheme: "Tema Teste"}
 
-    var MongoClient = require('mongodb').MongoClient;
+    categoria = req.body.categoria
+
+    const busca = { categoria: categoria}
+
+    const MongoClient = require('mongodb').MongoClient;
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) throw err;
