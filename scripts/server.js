@@ -4,14 +4,14 @@ const express = require("express")
 //Valor fixo 'app' para função express()
 const app = express()
 
-//Body Parser
-const bodyParser = require('body-parser')
-
 //HTTP
 const server = require('http').Server(app)
 
 //Cookie-Parser
 const cookieParser = require('cookie-parser')
+
+//MongoClient
+const MongoClient = require('mongodb').MongoClient;
 
 //CORS
 const cors = require('cors')
@@ -62,9 +62,7 @@ app.get('/perguntas', (req,res)=>{
 
     categoria = req.body.categoria
 
-    const busca = { categoria: categoria}
-
-    const MongoClient = require('mongodb').MongoClient;
+    const busca = { categoria: categoria }
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) throw err;
@@ -76,6 +74,8 @@ app.get('/perguntas', (req,res)=>{
         })
     })
 })
+
+
 
 server.listen(PORT, () => {
   console.log(`${msg_PORT}`)
