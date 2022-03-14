@@ -13,6 +13,9 @@ const cookieParser = require('cookie-parser')
 //MongoClient
 const MongoClient = require('mongodb').MongoClient;
 
+//ObjectID ajuda no controle das chaves de identificação
+const ObjectID = require('mongodb').ObjectID
+
 //CORS
 const cors = require('cors')
 
@@ -21,7 +24,9 @@ const PORT = process.env.PORT || 5000
 const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT}!`
 
 // Pacote Path - Para publicação
-const path = require('path')
+const path = require('path');
+const { ObjectId } = require("mongodb");
+const { stringify } = require("querystring");
 
 // hard coded configuration object
 const confCors = {
@@ -60,14 +65,22 @@ const uri = process.env.mongoDbURI
 
 app.get('/perguntas', (req,res)=>{
 
-    categoria = req.body.categoria
+    categoria = req.query.categoria
+    questoes_ja_respondidas = req.query.questoes_ja_respondidas;
 
-    const busca = { categoria: categoria }
+    qtd_perguntas_respondidas = questoes_ja_respondidas.length
+    filtro_perguntas_respondidas = []
+
+    for(i=0;qtd_perguntas_respondidas>i;i++) {
+        filtro_perguntas_respondidas.push( { idPergunta: { $ne: String(questoes_ja_respondidas[i]) } } )
+    }
+
+    filtro_perguntas_respondidas = { $and: filtro_perguntas_respondidas }
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) throw err;
         var dbo = QuestDB.db("QuestDB");
-        dbo.collection("QuestQuestions").find(busca).toArray(function (err, questions) {
+        dbo.collection("QuestQuestions").find(filtro_perguntas_respondidas).toArray(function (err, questions) {
             if (err) throw err;
             res.send(questions)
             QuestDB.close(); 
