@@ -65,12 +65,16 @@ const uri = process.env.mongoDbURI
 
 app.get('/perguntas', (req,res)=>{
 
-    categoria = req.query.categoria
+    categoriaReq = req.query.categoria
     questoes_ja_respondidas = req.query.questoes_ja_respondidas;
+
+
 
     qtd_perguntas_respondidas = questoes_ja_respondidas.length
     filtro_perguntas_respondidas = []
 
+    filtro_perguntas_respondidas.push( { categoria: categoriaReq } )
+    
     for(i=0;qtd_perguntas_respondidas>i;i++) {
         filtro_perguntas_respondidas.push( { idPergunta: { $ne: String(questoes_ja_respondidas[i]) } } )
     }
