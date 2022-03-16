@@ -93,17 +93,30 @@ app.get('/perguntas', (req,res)=>{
 })
 
 app.post('/perguntas/novapergunta', (req, res) => {
+    idPergunta = 
+    
+    novaPergunta = {
+        idPergunta : req.query.idPergunta,
+        categoria : req.query.categoria,
+        pergunta : req.query.pergunta,
+        respostaCorreta : req.query.respostaCorreta,
+        alternativaA : req.query.alternativaA,
+        alternativaB : req.query.alternativaB,
+        alternativaC : req.query.alternativaC,
+        alternativaD : req.query.alternativaD
+    } 
+
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) throw err;
         var dbo = QuestDB.db("QuestDB");
-        dbo.collection("QuestQuestions").find(filtro_perguntas_respondidas).toArray(function (err, questions) {
+        dbo.collection("QuestQuestions").insertOne(novaPergunta, function (err, confirmacao) {
             if (err) throw err;
-            res.send(questions)
+            console.log(confirmacao)
             QuestDB.close(); 
         })
     })
-    
+
     res.send("teste")
 })
 
