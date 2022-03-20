@@ -103,7 +103,8 @@ app.post('/perguntas/novapergunta', (req, res) => {
         alternativaA : req.query.alternativaA,
         alternativaB : req.query.alternativaB,
         alternativaC : req.query.alternativaC,
-        alternativaD : req.query.alternativaD
+        alternativaD : req.query.alternativaD,
+        info: req.query.info
     } 
 
 
