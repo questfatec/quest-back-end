@@ -1,27 +1,24 @@
 {
-  "name": "questbackend",
-  "version": "0.0.1",
-  "description": "Quest Game backend",
-  "main": "scripts/server.js",
+  "name": "questGame",
+  "version": "0.0.2",
+  "description": "teste de auth",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon scripts/server.js"
+    "start": "nodemon src/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/questfatec/quest-back-end.git"
-  },
-  "author": "Quest Devs",
+  "author": "Bruno Rodrigues de Carvalho",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/questfatec/quest-back-end/issues"
-  },
-  "homepage": "https://github.com/questfatec/quest-back-end#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
-    "mongoose": "^6.2.4",
-    "nodemon": "^2.0.15"
+    "mongoose": "^6.2.6",
+    "nodemon": "^2.0.15",
+    "querystring": "^0.2.1",
+    "swagger-ui-express": "^4.3.0"
   }
 }
