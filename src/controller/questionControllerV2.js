@@ -9,6 +9,8 @@ const { isValidObjectId } = require('../database');
 const authMiddleware = require('../middlewares/auth')
 const bancodedados = 'QuestDB'
 const colecao = 'QuestQuestionv2'
+let cors = require("cors");
+app.use(cors());
 
 const router = express.Router()
 
