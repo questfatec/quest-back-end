@@ -3,8 +3,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../config/auth.json')
-let cors = require("cors");
-app.use(cors());
+
 
 const User = require('../models/user')
 

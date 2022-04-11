@@ -3,8 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.mongoDbURI
 const { route } = require('express/lib/application')
 const authMiddleware = require('../middlewares/auth')
-let cors = require("cors");
-app.use(cors());
+
 
 const router = express.Router()
 
