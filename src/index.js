@@ -9,7 +9,7 @@ const app = express()
 app.use(bodyParser.json())
 
 //Para o servidor entender/decodar quando parâmetros forem passados pela URL
-app.use(bodyParser.urlencoded( {extended: false} ))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 //Cookie-Parser
 const cookieParser = require('cookie-parser')
@@ -34,13 +34,13 @@ const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT
 
 // hard coded configuration object
 const confCors = {
- 
+
     // origin undefined handler
     // see https://github.com/expressjs/cors/issues/71
     originUndefined: function (req, res, next) {
-            next()
+        next()
     },
- 
+
     // Cross Origin Resource Sharing Options
     cors: {
         // origin handler
@@ -53,10 +53,11 @@ const confCors = {
     }
 }
 
-app.use(confCors.originUndefined , cors(confCors.cors))
+// app.use(confCors.originUndefined , cors(confCors.cors))
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger/novoswagger.json');
@@ -70,7 +71,7 @@ require('./controller/questionController')(app)
 require('./controller/questionControllerV2')(app)
 
 app.get('/', (req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/html'})
+    res.writeHead(200, { 'Content-Type': 'text/html' })
     res.end('Bem Vindo ao Quest - Cadastre-se ou Faca Login para jogar...')
 })
 
