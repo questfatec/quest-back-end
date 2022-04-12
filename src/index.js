@@ -32,35 +32,29 @@ const cors = require('cors')
 const PORT = process.env.PORT || 4201
 const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT}!`
 
-// hard coded configuration object
-// const confCors = {
+//hard coded configuration object
+const confCors = {
 
-//     // origin undefined handler
-//     // see https://github.com/expressjs/cors/issues/71
-//     originUndefined: function (req, res, next) {
-//         next()
-//     },
+    // origin undefined handler
+    // see https://github.com/expressjs/cors/issues/71
+    originUndefined: function (req, res, next) {
+        next()
+    },
 
-//     // Cross Origin Resource Sharing Options
-//     cors: {
-//         // origin handler
-//         origin: function (origin, cb) {
-//             // setup a white list
-//             let wl = ['*']
-//             cb(null, true)
-//         },
-//         optionsSuccessStatus: 200
-//     }
-// }
+    // Cross Origin Resource Sharing Options
+    cors: {
+        // origin handler
+        origin: function (origin, cb) {
+            // setup a white list
+            let wl = ['*']
+            cb(null, true)
+        },
+        optionsSuccessStatus: 200
+    }
+}
 
-// app.use(confCors.originUndefined , cors(confCors.cors))
+app.use(confCors.originUndefined , cors(confCors.cors))
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    app.use(cors());
-    next();
-})
 
 app.use(cookieParser())
 app.use(express.json())
