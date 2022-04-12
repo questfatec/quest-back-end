@@ -60,7 +60,6 @@ router.get('/perguntas', async(req,res)=>{
 
 router.post('/novapergunta', async(req, res) => {  
     novaPergunta = {
-        idPergunta : req.body.idPergunta,
         categoria : req.body.categoria,
         pergunta : req.body.pergunta,
         respostaCorreta : req.body.respostaCorreta,

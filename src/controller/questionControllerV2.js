@@ -1,3 +1,4 @@
+
 const { Router } = require('express');
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
@@ -13,6 +14,7 @@ const colecao = 'QuestQuestionv2'
 const router = express.Router()
 
 router.use(authMiddleware)
+
 
 //CREATE
 router.post('/pergunta', async(req, res) => {  

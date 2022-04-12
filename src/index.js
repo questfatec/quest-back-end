@@ -66,6 +66,7 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 require('./controller/authController')(app)
+require('./controller/categoryController')(app)
 require('./controller/questionController')(app)
 require('./controller/questionControllerV2')(app)
 
