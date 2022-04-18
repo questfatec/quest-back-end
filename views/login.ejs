@@ -1,21 +1,23 @@
 <html>
     <head>
         <title>Quest - Login</title>
+        <link rel="stylesheet" href="/css/login.css">
     </head>
     <body>
-        <h1>Quest</h1>
-        <h2>Login</h2>
-        Login (e-mail): 
-        <input type="email" id="email">
-        <br><br>
-        Senha: 
-        <input type="password" id="password">
-        <br><br>
-        <input type="button" value="Entrar" id="entrarJogador">
-        <input type="button" value="Novo Jogador" id="novoJogador">
-        <input type="button" value="Esqueci minha senha" onclick="()=>{alert('Por favor cadastre um novo usuário')}">
-    
-        <script
+        <h1 class="login-form-title">Quest</h1>
+        <div class="login-container">
+            <h2 class="login">Faça o Login!</h2>
+            <div class="inputs">
+                <input placeholder="e-mail" autocomplete="off" class="inputbox" type="email" id="email"> 
+                <input placeholder="senha" autocomplete="off" class="inputbox" type="password" id="password">
+            </div>
+            <div class="buttons">
+                <input class="button" type="button" value="Entrar" id="entrarJogador">
+                <input class="button" type="button" value="Novo Jogador" id="novoJogador">
+                <input class="button" type="button" value="Esqueci minha senha" onclick="()=>{alert('Por favor cadastre um novo usuário')}">
+            </div>
+        </div>
+            <script
             src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
             crossorigin="anonymous">

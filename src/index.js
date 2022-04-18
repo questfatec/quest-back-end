@@ -11,7 +11,7 @@ const app = express()
 app.use(bodyParser.json())
 
 //Para o servidor entender/decodar quando parâmetros forem passados pela URL
-app.use(bodyParser.urlencoded( {extended: false} ))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 //Cookie-Parser
 const cookieParser = require('cookie-parser')
@@ -25,7 +25,9 @@ const path = require('path');
 //ObjectID ajuda no controle das chaves de identificação
 const { ObjectId } = require("mongodb");
 
-const { stringify } = require("querystring");0
+const { stringify } = require("querystring"); 0
+
+
 
 //CORS
 const cors = require('cors')
@@ -36,21 +38,22 @@ const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT
 
 app.use(sessions({
     secret: "perauvamacaosaladaMista*$¨#$@$#@%@$#&*#¨%¨#thisismysecrctekabobraseyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
+    saveUninitialized: true,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
     resave: false
 }));
 
+
 // hard coded configuration object
 const confCors = {
- 
+
     // origin undefined handler
     // see https://github.com/expressjs/cors/issues/71
     originUndefined: function (req, res, next) {
         res.setHeader('Access-Control-Allow-Credentials', true);
         next()
     },
- 
+
     // Cross Origin Resource Sharing Options
     cors: {
         // origin handler
@@ -63,10 +66,10 @@ const confCors = {
     }
 }
 
-app.use(confCors.originUndefined , cors(confCors.cors))
+app.use(confCors.originUndefined, cors(confCors.cors))
 app.use(cookieParser())
 app.use(express.json())
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger/novoswagger.json');
@@ -78,6 +81,10 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 //console.log("EJS engine view: OK.")
+
+// Static Files
+app.use(express.static('public'))
+app.use('/css', express.static(__dirname + 'public/css'))
 
 // Definição das variáveis para criar a DOM para o JQuery funcionar com o EJS
 var jsdom = require("jsdom");
