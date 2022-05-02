@@ -1,0 +1,343 @@
+<html>
+    <head>
+        <style>
+            th, td {
+                border: 0.5px solid grey;
+                border-radius: 2px;
+                border-collapse: collapse;
+                border-style: groove;
+                padding: 1px
+            }
+            textarea {
+                width: auto;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1>
+            Olá <%=nomeJogador%>, você fez login com sucesso! - Perfil: <%=perfil%>
+        </h1>
+
+        <hr>
+
+        <a href="/">Voltar</a><br><br>
+
+        <h2> Registrar nova pergunta </h2>
+
+        <form> <!--Formulário base para registro de nova perguntas -->
+            <!--Opções para Categoria de Perguntas-->
+            Categoria: 
+            <select name="categoria" id="categoriaNova"></select>
+            <a href="/categoria/"> Gerenciar Categorias</a>
+            <br>
+
+
+            <!--Demais dados para cadastrar uma nova pergunta -->
+            Pergunta: <input type="text" id="perguntaNova"></input><br>
+            Resposta Correta: <input type="text" id="respostaCorretaNova"></input><br>
+            Alternativa A: <input type="text" id="alternativaANova"></input><br>
+            Alternativa B: <input type="text" id="alternativaBNova"></input><br>
+            Alternativa C: <input type="text" id="alternativaCNova"></input><br>
+            Alternativa D: <input type="text" id="alternativaDNova"></input><br>            
+            Justificativa / Fonte: <input type="text" id="infoNova"></input><br>
+            Dica: <input type="text" id="dicaNova"></input><br><br>
+
+            <input type="button" value="GRAVAR NOVA PERGUNTA" onclick="gravarNovaPergunta()"></input>
+        </form>
+
+        <hr>
+
+        <h2> Lista de Perguntas Registradas no Jogo </h2>
+
+        <table id="listaPerguntas">
+            <tr>
+                <th>ID</th>
+                <th>Categoria</th>
+                <th>Pergunta</th>
+                <th>Resposta Correta</th>
+                <th>Alternativa A</th>
+                <th>Alternativa B</th>
+                <th>alternativa C</th>
+                <th>alternativa D</th>
+                <th>Justificativa / Fonte</th>
+                <th>Dica</th>
+                <th>Versão</th>
+                <th>Salvar Alterações</th>
+                <th>Excluir</th>
+            </tr>
+            <!--Espaço para listart perguntas-->
+        </table> 
+
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous">
+    </script>
+
+    </script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+
+    <script>
+        //Buscar e listar categorias
+        categoriasObjdelta = []
+
+        //console.log("Categorias Obj: ", categoriasObjdelta)
+        categoriasObj = []
+
+        async function listarCategorias(idParaCategoria, catop) {
+            var dropdown = document.getElementById(idParaCategoria);            
+            let opcoesCategorias
+
+            //console.log("categoriasObjdelta.length: ", categoriasObjdelta.length)
+
+            if(!categoriasObjdelta.length || categoriasObjdelta.length==0) {
+                console.log("Array vazia!")
+            } else {
+                for (let i = 0; i < categoriasObjdelta.length; i++) {
+                    opcoesCategorias = document.createElement('option');
+                    opcoesCategorias.text = categoriasObjdelta[i]
+                    opcoesCategorias.value =  categoriasObjdelta[i]
+                    //console.log("teste", opcoesCategorias)
+                    //categoriasObj.push(data[i].categoria)
+                    dropdown.add(opcoesCategorias);
+                }
+            //console.log("categorias: ", categoriasObj)
+
+                if(catop) { dropdown.value = catop }
+            
+            }
+        }
+
+
+        //Buscar e listar categorias (V2)
+        
+        async function listaDelta(){
+
+            $.ajax({
+                url: "/categoria/categorias",
+                type: 'GET',
+                success: (resposta) => {
+                    for (let i = 0; i < resposta.length; i++) {
+                            categoriasObjdelta.push(resposta[i].categoria)
+                    }
+                    //console.log("Acho que deu certo: ", categoriasObjdelta)
+                    listarCategorias('categoriaNova')
+                },
+                error: (xhr) => {
+                    alert(xhr.status, ":", xhr.responseText)
+                    //console.log("Não deu certo a exclusão!!: " + xhr.status + " " + xhr.statusText);
+                }
+            });
+ 
+        }
+        
+        listaDelta()
+        
+
+
+        //Buscar e listar todas as perguntas registradas
+        async function listarPerguntas(perguntas) {
+            versao_pergunta = perguntas.__v +1
+
+            recebido =`
+                <tr class='perguntaLista' id='tr_${perguntas._id}'>
+                    <td>${perguntas._id}</td> 
+                    <td>
+                        <select name="categoria" id="categoriaNova_${perguntas._id}">
+                            <option value="${perguntas.categoria}">${perguntas.categoria}</option>                         
+                        </select>
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="20" id='pergunta_enunciado_nova_${perguntas._id}'>${perguntas.pergunta}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="9" id='pergunta_respostaCorreta_nova_${perguntas._id}'>${perguntas.respostaCorreta}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="9" id='pergunta_alternativaA_nova_${perguntas._id}'>${perguntas.alternativaA}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="9" id='pergunta_alternativaB_nova_${perguntas._id}'>${perguntas.alternativaB}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="9" id='pergunta_alternativaC_nova_${perguntas._id}'>${perguntas.alternativaC}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="9" id='pergunta_alternativaD_nova_${perguntas._id}'>${perguntas.alternativaD}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="10" id='pergunta_info_nova_${perguntas._id}'>${perguntas.info}</textarea> 
+                    </td>
+                    <td>
+                        <textarea rows="5" cols="10" id='pergunta_dica_nova_${perguntas._id}'>${perguntas.dica}</textarea> 
+                    </td>
+                    <td>${versao_pergunta}</td>
+                    <td>
+                        <a href="#" onclick="editar('${perguntas._id}')">SALVAR</a>
+                    </td>
+                    <td>
+                        <a href="#" onclick="excluir('${perguntas._id}')">EXCLUIR</a>
+                    </td>
+                </tr>
+            `
+
+            $("#listaPerguntas").append(recebido)
+            
+            idObjStr = "categoriaNova_" + perguntas._id
+            listarCategorias(idObjStr, perguntas.categoria)
+
+        }
+
+        async function buscarPerguntas() {
+            $.get(
+                '/jogoV3/perguntas',
+                (perguntas) => {
+                    var qtd = Object.keys(perguntas).length
+                    if (qtd == 0 || !qtd) {
+                        //console.log("Não há perguntas cadastradas")
+                        $("#listaPerguntas").append(`<b>AINDA NÃO HÁ PERGUNTAS!</b>`)
+                    } else {
+                        console.log("Quantidade atual de perguntas no banco de dados: ", qtd)
+                        perguntas.forEach(listarPerguntas)
+                        //console.log("idObj: ", idObj)
+                    }
+                }
+            )
+        }
+
+        buscarPerguntas()
+
+        listarCategorias('categoriaNova2')
+        
+        //Excluir pergunta específica
+        async function excluir(idPerguntaExcluir) {
+            //console.log("começando a deletar")
+            id = {_id: idPerguntaExcluir} 
+            console.log("Id: ", id)
+            $.ajax({
+                url: "/jogoV3/pergunta",
+                type: 'DELETE',
+                data: id,
+                success: function(resposta) {
+                    $('.perguntaLista').remove()
+                    buscarPerguntas()
+                    alert(resposta)
+                },
+                error: function(xhr) {
+                    alert(xhr.status, ":", xhr.responseText)
+                    //console.log("Não deu certo a exclusão!!: " + xhr.status + " " + xhr.statusText);
+                }
+            });
+        }
+
+        //Editar nova pergunta
+        async function editar(id) {
+            //console.log(id)
+            //Guardar valores na memória para criação de objeto e validação 
+            categoriaNova = $("#categoriaNova_" + id).val(),
+            perguntaNova = $("#pergunta_enunciado_nova_" + id).val(),
+            respostaCorretaNova = $("#pergunta_respostaCorreta_nova_" + id).val(),
+            alternativaANova = $("#pergunta_alternativaA_nova_" + id).val(),
+            alternativaBNova = $("#pergunta_alternativaB_nova_" + id).val(),
+            alternativaCNova = $("#pergunta_alternativaC_nova_" + id).val(),
+            alternativaDNova = $("#pergunta_alternativaD_nova_" + id).val(),
+            infoNova = $("#pergunta_info_nova_" + id).val(),
+            dicaNova = $("#pergunta_dica_nova_" + id).val()
+
+            //Criar objeto para os dados que serão editados na pergunta
+            var novaPergunta = {
+                _id : id,
+                categoria : categoriaNova,
+                pergunta : perguntaNova,
+                respostaCorreta : respostaCorretaNova,
+                alternativaA : alternativaANova,
+                alternativaB : alternativaBNova,
+                alternativaC : alternativaCNova,
+                alternativaD : alternativaDNova,
+                dica: dicaNova,
+                info: infoNova
+            }
+
+            //Teste - O que estão tentando editar
+            //console.log(novaPergunta)
+
+            if( !categoriaNova || !perguntaNova || !respostaCorretaNova || !alternativaANova || !alternativaBNova || !alternativaCNova || !alternativaDNova || !dicaNova || !infoNova ) {
+                alert("Impossível alterar pergunta. Por favor preencha todos os campos e tente novamente.")
+            } else if (respostaCorretaNova != alternativaANova && respostaCorretaNova != alternativaBNova && respostaCorretaNova != alternativaCNova && respostaCorretaNova != alternativaDNova) {
+                alert("A resposta correta não está igual a nenhuma das alternativas. Por favor revise e tente novamente.")
+            } else {
+                $.ajax({
+                    url: "/jogoV3/pergunta",
+                    type: 'PUT',
+                    data: novaPergunta,
+                    success: function(resposta) {
+                        $('.perguntaLista').remove()
+                        buscarPerguntas()
+                        alert(resposta)
+                    },
+                    error: function(xhr) {
+                        alert(xhr.status, ":", xhr.responseText)
+                        //console.log("Não deu certo a alteração de uma nova pergunta!!: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            }
+        }
+
+        //Cadastrar nova pergunta
+        async function gravarNovaPergunta () {
+
+            //Guardar valores na memória para criação de objeto e validação 
+            categoriaNova = $("#categoriaNova").val(),
+            perguntaNova = $("#perguntaNova").val(),
+            respostaCorretaNova = $("#respostaCorretaNova").val(),
+            alternativaANova = $("#alternativaANova").val(),
+            alternativaBNova = $("#alternativaBNova").val(),
+            alternativaCNova = $("#alternativaCNova").val(),
+            alternativaDNova = $("#alternativaDNova").val(),
+            dicaNova = $("#dicaNova").val()
+            infoNova = $("#infoNova").val()
+
+            //Criar objeto para os dados que serão cadastrados na nova pergunta
+            var novaPergunta = {
+                categoria : categoriaNova,
+                pergunta : perguntaNova,
+                respostaCorreta : respostaCorretaNova,
+                alternativaA : alternativaANova,
+                alternativaB : alternativaBNova,
+                alternativaC : alternativaCNova,
+                alternativaD : alternativaDNova,
+                dica: dicaNova,
+                info: infoNova
+            }
+
+            //Teste - O que estão tentando cadastrar
+            //console.log(novaPergunta)
+
+            if( !perguntaNova || !respostaCorretaNova || !alternativaANova || !alternativaBNova || !alternativaCNova || !alternativaDNova || !dicaNova || !infoNova ) {
+                alert("Impossível gravar nova pergunta. Por favor preencha todos os campos e tente novamente.")
+            } else if (respostaCorretaNova != alternativaANova && respostaCorretaNova != alternativaBNova && respostaCorretaNova != alternativaCNova && respostaCorretaNova != alternativaDNova) {
+                alert("A resposta correta não está igual a nenhuma das alternativas. Por favor revise e tente novamente.")
+            } else {
+                $.ajax({
+                    url: "/jogoV3/pergunta",
+                    type: 'POST',
+                    data: novaPergunta,
+                    success: function(resposta) {
+                        $('.perguntaLista').remove()
+                        buscarPerguntas()
+                        alert(resposta)
+                    },
+                    error: function(xhr) {
+                        alert(xhr.status, ":", xhr.responseText)
+                        //console.log("Não deu certo a criação de uma nova pergunta!!: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+</html>
