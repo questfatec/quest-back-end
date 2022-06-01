@@ -26,7 +26,7 @@ router.get('/', async(req,res) => {
     if (emailJogador == "superadmin@superadmin") {
         res.render('admin', {nomeJogador: nomeJogador, perfil: "SUPER ADMIN"})
     } else {
-        res.render('jogo', {nomeJogador: nomeJogador, perfil: "Jogador"})
+        res.render('prelobby', {nomeJogador: nomeJogador, perfil: "Jogador"})
     }
 })
 
@@ -88,7 +88,7 @@ router.post('/pergunta', async(req, res) => {
                 })}
         })
     }
-})
+}) 
 
 //READ
 
@@ -97,7 +97,7 @@ router.get('/perguntas', async(req,res)=>{
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) throw err;
         var dbo = QuestDB.db(bancodedados);
-        dbo.collection(colecao).find().toArray(function await(err, questions) {
+        dbo.collection(colecao).find().sort({categoria:1, pergunta: 1}).toArray(function await(err, questions) {
             if (err) throw err;
             res.status(200).send(questions)
             QuestDB.close(); 
@@ -108,28 +108,33 @@ router.get('/perguntas', async(req,res)=>{
 //READ - REGRA DE FRONT - ÚNICA PERGUNTA QUALQUER DESDE QUE AINDA NÃO RESPONDIDA DURANTE A SESSÃO
 //*** PARA SABER AS PERGUNTAS JÁ RESPONDIDAS, O FRONT PRECISA INFORMAR O ID DA PERGUNTA
 router.get('/pergunta', async(req,res) => {
-    if(!req.body.categoria || !req.body) {
-        res.status(400).send("Tá de zoeira né tio?! rsrs")
+
+    //console.log("O que foi recebido-body: ", req.body)
+    //console.log("O que foi recebido-query: ", req.query)
+
+    data = JSON.parse(req.headers.data)
+
+    //console.log("O que foi recebido-headers.data: ", data )
+
+    if(!data.categoria || !data.questoes_ja_respondidas) {
+        //console.log("categoria: ",!data.categoria)
+        //console.log("questões respondidas: ",!data.questoes_ja_respondidas)
+        res.status(421).send("Tá de zoeira né tio?! rsrs")
     } else {
-        var categoriaReq = String(req.body.categoria)
-        var respondidas = req.body.questoes_ja_respondidas
-
-        //console.log("Categorias Informadas - REQ: ", categoriaReq)
-        //console.log("Questões Respondidas - REQ: ", respondidas)
-        ///console.log(respondidas.length)
-
+        var categoriaReq = String(data.categoria)
+        var respondidas = data.questoes_ja_respondidas
         var filtro
 
-        if(respondidas.length==0 && !req.body.categoria) {
-            //console.log("Sem info de ID")
+        if(respondidas.length==0 && !data.categoria) {
+
             filtro = {}
+
         } else {
+
             filtro = []
             filtro.push({ categoria: categoriaReq })
 
             if (respondidas.length===0) {
-
-                //console.log("Sem perguntas respondidas!")
             
                 filtro = { categoria: categoriaReq }
 
@@ -141,27 +146,27 @@ router.get('/pergunta', async(req,res) => {
                     item = ObjectId(item)
                     filtro.push( { _id : { $ne: item } } )
                 }
+ 
+                filtro = { $and: filtro }  
 
-                filtro = { $and: filtro }
-
-                //console.log("filtro2: ", filtro)
+                MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
+                    if(err) throw err;
+                    var dbo = QuestDB.db(bancodedados);
+                    var alea = Math.floor(Math.random() * 11)
+                    //console.log(alea)
+                    dbo.collection(colecao).find(filtro).limit(1).skip(alea).toArray(function await(err, questions) {
+                        if(err) throw err
+                        else if(questions.length==0) {
+                            res.status(421).send("Não há outras perguntas para exibir no momento. Peça para o administrador cadastrar mais e tente novamente.")
+                        } else {
+                            res.status(200).send(questions)
+                        }
+                        QuestDB.close(); 
+                    })
+                })
             
             }
         }
-
-        MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
-            if(err) throw err;
-            var dbo = QuestDB.db(bancodedados);
-            dbo.collection(colecao).find(filtro).limit(1).toArray(function await(err, questions) {
-                if(err) throw err
-                else if(questions.length==0) {
-                    res.status(400).send("Deu ruim, pois a query não tem nenhum resultado com esses filtros (Categoria + Exclusão de certos IDs")
-                } else {
-                    res.status(200).send(questions)
-                }
-                QuestDB.close(); 
-            })
-        })
     }
 })
 
@@ -171,27 +176,27 @@ router.put('/pergunta', async(req, res) => {
     if(!req.body._id) {
         res.status(401).send("Falha do Cliente: Faltou informar ID da pergunta")
     } else if(!req.body.categoria) {
-        res.status(401).send("Falha do Cliente: Faltou informar a categoria")
+        res.status(402).send("Falha do Cliente: Faltou informar a categoria")
         // Falta testar se é uma categoria válida!
     } else if (!req.body.pergunta) {
-        res.status(401).send("Falha do Cliente: Faltou informar a pergunta")
+        res.status(403).send("Falha do Cliente: Faltou informar a pergunta")
     } else if (!req.body.respostaCorreta) {
-        res.status(401).send("Falha do Cliente: Faltou informar a resposta correta")
+        res.status(404).send("Falha do Cliente: Faltou informar a resposta correta")
         //preciso testar algum formato?
     } else if (!req.body.alternativaA) {
-        res.status(401).send("Falha do Cliente: Faltou informar alternativaA")
+        res.status(405).send("Falha do Cliente: Faltou informar alternativaA")
         //preciso testar algum formato?
     } else if (!req.body.alternativaB) {
-        res.status(401).send("Falha do Cliente: Faltou informar alternativaB")
+        res.status(406).send("Falha do Cliente: Faltou informar alternativaB")
         //preciso testar algum formato?
     } else if (!req.body.alternativaC) {
-        res.status(401).send("Falha do Cliente: Faltou informar alternativaC")
+        res.status(407).send("Falha do Cliente: Faltou informar alternativaC")
         //preciso testar algum formato?
     } else if (!req.body.alternativaA) {
-        res.status(401).send("Falha do Cliente: Faltou informar alternativaD")
+        res.status(408).send("Falha do Cliente: Faltou informar alternativaD")
         //preciso testar algum formato?
     } else if (!req.body.info) {
-        res.status(401).send("Falha do Cliente: Faltou informar a fonte")
+        res.status(409).send("Falha do Cliente: Faltou informar a fonte")
     } else {
         console.log("_id:", req.body._id)
 
@@ -211,7 +216,8 @@ router.put('/pergunta', async(req, res) => {
                         alternativaB : req.body.alternativaB,
                         alternativaC : req.body.alternativaC,
                         alternativaD : req.body.alternativaD,
-                        info: req.body.info
+                        info: req.body.info,
+                        dica: req.body.dica
                     },
                     $inc: { __v: 1}
                 }
@@ -219,7 +225,7 @@ router.put('/pergunta', async(req, res) => {
                 dbo.collection(colecao).updateOne({"_id": ObjectId(req.body._id)}, pergunta, function (err, confirmacao) {
                     if (err) {
                         console.log("Erro ao tentar alterar pergunta: ", err)
-                        res.status(400).send("Impossível alterar essa pergunta. Tente outro ID ou insulte o Bruno!")
+                        res.status(410).send("Impossível alterar essa pergunta. Tente outro ID ou insulte o Bruno!")
                     } else {
                         console.log("Pergunta alterada com sucesso: ",confirmacao)
                         res.status(200).send("Pergunta alterada com sucesso.")
@@ -230,7 +236,6 @@ router.put('/pergunta', async(req, res) => {
         })
     }
 })
-
 
 //DELETE
 router.delete('/pergunta', async(req, res) => {
@@ -257,6 +262,14 @@ router.delete('/pergunta', async(req, res) => {
             })
         }
     })
+})
+
+router.get('/singleplayer', async(req,res) => {
+    res.render('singleplayer')
+})
+
+router.get('/multiplayer', async(req,res) => {
+    res.render('jogo')
 })
 
 module.exports = app => app.use('/jogoV3', router)

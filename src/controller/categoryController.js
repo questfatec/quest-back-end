@@ -55,13 +55,12 @@ router.get('/', async (req, res) => {
 
         if(!categoria) {
             res.status(401).send("Falha do Cliente: Faltou informar nome da categoria a ser deletada")
-        } else if(!await Category.findOne({ categoria: categoria }))
+        } else if(!await Category.findOne({ categoria: categoria })) {
             return res.status(412).send({error: 'Falha - Categoria não existe.Por favor informe outra categoria.'})
-    
-
-        const onecategory = await Category.findOne({categoria: categoria})
-
-        return res.send({onecategory})
+        } else {
+            const onecategory = await Category.findOne({categoria: categoria}, {categoria:1})   
+        }
+        
 
     } catch (err) {
         return res.status(400).send( {error: 'Falha - Leitura não realizada.'} )
@@ -74,7 +73,7 @@ router.get('/categorias', async (req, res) => {
 
     try {
         
-        const allcategories = await Category.find({})
+        const allcategories = await Category.find({}).sort({categoria:1})
 
         return res.send(allcategories)
 
@@ -123,7 +122,7 @@ router.put('/', async (req, res) => {
                                         if (err) {
                                             console.log("Erro ao tentar atualizar as categorias das perguntas já existentes: ", err)
                                             res.status(462).send("Impossível alterar essa categoria. Tente outro ID ou insulte o Bruno!")
-                                        } else if (confirmacao.matchedCount > 0 ) {
+                                        } else if (confirmacao.acknowledged == true ) {
                                             console.log("Categoria alterada com sucesso nas perguntas: ",confirmacao)
                                             res.status(200).send("Categoria atualizada nas perguntas com sucesso.")
                                         } else {

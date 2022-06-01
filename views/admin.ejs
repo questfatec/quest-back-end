@@ -29,8 +29,7 @@
         <form> <!--Formulário base para registro de nova perguntas -->
             <!--Opções para Categoria de Perguntas-->
             Categoria: 
-            <select name="categoria" id="categoriaNova">
-            </select>
+            <select name="categoria" id="categoriaNova"></select>
             <a href="/categoria/"> Gerenciar Categorias</a>
             <br>
 
@@ -83,55 +82,62 @@
 
     <script>
         //Buscar e listar categorias
-        var dropdown = document.getElementById('categoriaNova');
-        dropdown.length = 0
-        dropdown.selectedIndex = 0
+        categoriasObjdelta = []
 
+        //console.log("Categorias Obj: ", categoriasObjdelta)
         categoriasObj = []
-        idObj = []
 
-        const request = new XMLHttpRequest();
-        request.open('GET', '/categoria/categorias', true);
+        async function listarCategorias(idParaCategoria, catop) {
+            var dropdown = document.getElementById(idParaCategoria);            
+            let opcoesCategorias
 
-        fetch('/categoria/categorias')
-            .then(
-                async function(response) {                    
-                    if (response.status !== 200) {
-                        console.warn('Erro, código: ' + response.status)
-                        return
-                    }
+            //console.log("categoriasObjdelta.length: ", categoriasObjdelta.length)
 
-                response.json().then(function(data) {
-                    let option
+            if(!categoriasObjdelta.length || categoriasObjdelta.length==0) {
+                console.log("Array vazia!")
+            } else {
+                for (let i = 0; i < categoriasObjdelta.length; i++) {
+                    opcoesCategorias = document.createElement('option');
+                    opcoesCategorias.text = categoriasObjdelta[i]
+                    opcoesCategorias.value =  categoriasObjdelta[i]
+                    //console.log("teste", opcoesCategorias)
+                    //categoriasObj.push(data[i].categoria)
+                    dropdown.add(opcoesCategorias);
+                }
+            //console.log("categorias: ", categoriasObj)
 
-                    for (let i = 0; i < data.length; i++) {
-                        option = document.createElement('option');
-                        option.text = data[i].categoria;
-                        option.value = data[i].categoria;
-                        dropdown.add(option);
-                        //console.log(option)
-                        categoriasObj.push(data[i].categoria)
-                    }
-                    console.log(categoriasObj)
-                })
+                if(catop) { dropdown.value = catop }
+            
             }
-        )
-        .catch(function(err) {
-            console.error("Erro de Fetch -", err)
-        })
-
-/*         //Para popular lista de categorias
-        async function listCat(id) {
-            let option
-            let ref = document.getElementById("categoriaNova_" + id)
-
-            for (let i = 0; i < categoriasObj.length; i++) {
-                //console.log(categoriasObj[i])
-                ref.append(`<option value="` + categoriasObj[i] + `">${categoriasObj[i]}</option>`);
-            }
-            console.log(ref)
         }
- */
+
+
+        //Buscar e listar categorias (V2)
+        
+        async function listaDelta(){
+
+            $.ajax({
+                url: "/categoria/categorias",
+                type: 'GET',
+                success: (resposta) => {
+                    for (let i = 0; i < resposta.length; i++) {
+                            categoriasObjdelta.push(resposta[i].categoria)
+                    }
+                    //console.log("Acho que deu certo: ", categoriasObjdelta)
+                    listarCategorias('categoriaNova')
+                },
+                error: (xhr) => {
+                    alert(xhr.status, ":", xhr.responseText)
+                    //console.log("Não deu certo a exclusão!!: " + xhr.status + " " + xhr.statusText);
+                }
+            });
+ 
+        }
+        
+        listaDelta()
+        
+
+
         //Buscar e listar todas as perguntas registradas
         async function listarPerguntas(perguntas) {
             versao_pergunta = perguntas.__v +1
@@ -141,32 +147,32 @@
                     <td>${perguntas._id}</td> 
                     <td>
                         <select name="categoria" id="categoriaNova_${perguntas._id}">
-                            <option value="${perguntas.categoria}">${perguntas.categoria}</option>                          
+                            <option value="${perguntas.categoria}">${perguntas.categoria}</option>                         
                         </select>
                     </td>
                     <td>
-                        <textarea rows="5" cols="20" id='pergunta_enunciado_nova${perguntas._id}'>${perguntas.pergunta}</textarea> 
+                        <textarea rows="5" cols="20" id='pergunta_enunciado_nova_${perguntas._id}'>${perguntas.pergunta}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="9" id='pergunta_respostaCorreta_nova${perguntas._id}'>${perguntas.respostaCorreta}</textarea> 
+                        <textarea rows="5" cols="9" id='pergunta_respostaCorreta_nova_${perguntas._id}'>${perguntas.respostaCorreta}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="9" id='pergunta_alternativaA_nova${perguntas._id}'>${perguntas.alternativaA}</textarea> 
+                        <textarea rows="5" cols="9" id='pergunta_alternativaA_nova_${perguntas._id}'>${perguntas.alternativaA}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="9" id='pergunta_alternativaB_nova${perguntas._id}'>${perguntas.alternativaB}</textarea> 
+                        <textarea rows="5" cols="9" id='pergunta_alternativaB_nova_${perguntas._id}'>${perguntas.alternativaB}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="9" id='pergunta_alternativaC_nova${perguntas._id}'>${perguntas.alternativaC}</textarea> 
+                        <textarea rows="5" cols="9" id='pergunta_alternativaC_nova_${perguntas._id}'>${perguntas.alternativaC}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="9" id='pergunta_alternativaD_nova${perguntas._id}'>${perguntas.alternativaD}</textarea> 
+                        <textarea rows="5" cols="9" id='pergunta_alternativaD_nova_${perguntas._id}'>${perguntas.alternativaD}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="10" id='pergunta_info_nova${perguntas._id}'>${perguntas.info}</textarea> 
+                        <textarea rows="5" cols="10" id='pergunta_info_nova_${perguntas._id}'>${perguntas.info}</textarea> 
                     </td>
                     <td>
-                        <textarea rows="5" cols="10" id='pergunta_dica_nova${perguntas._id}'>${perguntas.dica}</textarea> 
+                        <textarea rows="5" cols="10" id='pergunta_dica_nova_${perguntas._id}'>${perguntas.dica}</textarea> 
                     </td>
                     <td>${versao_pergunta}</td>
                     <td>
@@ -179,22 +185,24 @@
             `
 
             $("#listaPerguntas").append(recebido)
-            //listCat(perguntas._id)
-        
+            
+            idObjStr = "categoriaNova_" + perguntas._id
+            listarCategorias(idObjStr, perguntas.categoria)
+
         }
 
-    
         async function buscarPerguntas() {
             $.get(
                 '/jogoV3/perguntas',
                 (perguntas) => {
                     var qtd = Object.keys(perguntas).length
                     if (qtd == 0 || !qtd) {
-                        console.log("Não há perguntas cadastradas")
+                        //console.log("Não há perguntas cadastradas")
                         $("#listaPerguntas").append(`<b>AINDA NÃO HÁ PERGUNTAS!</b>`)
                     } else {
                         console.log("Quantidade atual de perguntas no banco de dados: ", qtd)
                         perguntas.forEach(listarPerguntas)
+                        //console.log("idObj: ", idObj)
                     }
                 }
             )
@@ -202,9 +210,11 @@
 
         buscarPerguntas()
 
+        listarCategorias('categoriaNova2')
+        
         //Excluir pergunta específica
         async function excluir(idPerguntaExcluir) {
-            console.log("começando a deletar")
+            //console.log("começando a deletar")
             id = {_id: idPerguntaExcluir} 
             console.log("Id: ", id)
             $.ajax({
@@ -217,10 +227,63 @@
                     alert(resposta)
                 },
                 error: function(xhr) {
-                    alert(xhr)
-                    console.log("Não deu certo a exclusão!!: " + xhr.status + " " + xhr.statusText);
+                    alert(xhr.status, ":", xhr.responseText)
+                    //console.log("Não deu certo a exclusão!!: " + xhr.status + " " + xhr.statusText);
                 }
             });
+        }
+
+        //Editar nova pergunta
+        async function editar(id) {
+            //console.log(id)
+            //Guardar valores na memória para criação de objeto e validação 
+            categoriaNova = $("#categoriaNova_" + id).val(),
+            perguntaNova = $("#pergunta_enunciado_nova_" + id).val(),
+            respostaCorretaNova = $("#pergunta_respostaCorreta_nova_" + id).val(),
+            alternativaANova = $("#pergunta_alternativaA_nova_" + id).val(),
+            alternativaBNova = $("#pergunta_alternativaB_nova_" + id).val(),
+            alternativaCNova = $("#pergunta_alternativaC_nova_" + id).val(),
+            alternativaDNova = $("#pergunta_alternativaD_nova_" + id).val(),
+            infoNova = $("#pergunta_info_nova_" + id).val(),
+            dicaNova = $("#pergunta_dica_nova_" + id).val()
+
+            //Criar objeto para os dados que serão editados na pergunta
+            var novaPergunta = {
+                _id : id,
+                categoria : categoriaNova,
+                pergunta : perguntaNova,
+                respostaCorreta : respostaCorretaNova,
+                alternativaA : alternativaANova,
+                alternativaB : alternativaBNova,
+                alternativaC : alternativaCNova,
+                alternativaD : alternativaDNova,
+                dica: dicaNova,
+                info: infoNova
+            }
+
+            //Teste - O que estão tentando editar
+            //console.log(novaPergunta)
+
+            if( !categoriaNova || !perguntaNova || !respostaCorretaNova || !alternativaANova || !alternativaBNova || !alternativaCNova || !alternativaDNova || !dicaNova || !infoNova ) {
+                alert("Impossível alterar pergunta. Por favor preencha todos os campos e tente novamente.")
+            } else if (respostaCorretaNova != alternativaANova && respostaCorretaNova != alternativaBNova && respostaCorretaNova != alternativaCNova && respostaCorretaNova != alternativaDNova) {
+                alert("A resposta correta não está igual a nenhuma das alternativas. Por favor revise e tente novamente.")
+            } else {
+                $.ajax({
+                    url: "/jogoV3/pergunta",
+                    type: 'PUT',
+                    data: novaPergunta,
+                    success: function(resposta) {
+                        $('.perguntaLista').remove()
+                        buscarPerguntas()
+                        alert(resposta)
+                    },
+                    error: function(xhr) {
+                        alert(xhr.status, ":", xhr.responseText)
+                        //console.log("Não deu certo a alteração de uma nova pergunta!!: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            }
         }
 
         //Cadastrar nova pergunta
@@ -251,7 +314,7 @@
             }
 
             //Teste - O que estão tentando cadastrar
-            console.log(novaPergunta)
+            //console.log(novaPergunta)
 
             if( !perguntaNova || !respostaCorretaNova || !alternativaANova || !alternativaBNova || !alternativaCNova || !alternativaDNova || !dicaNova || !infoNova ) {
                 alert("Impossível gravar nova pergunta. Por favor preencha todos os campos e tente novamente.")
@@ -268,11 +331,13 @@
                         alert(resposta)
                     },
                     error: function(xhr) {
-                        alert(xhr)
-                        console.log("Não deu certo a criação de uma nova pergunta!!: " + xhr.status + " " + xhr.statusText);
+                        alert(xhr.status, ":", xhr.responseText)
+                        //console.log("Não deu certo a criação de uma nova pergunta!!: " + xhr.status + " " + xhr.statusText);
                     }
                 });
             }
         }
+
+        
     </script>
 </html>
