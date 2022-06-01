@@ -34,7 +34,7 @@ const { stringify } = require("querystring");0
 const cors = require('cors')
 
 //Reconhecimento dinâmico de porta do servidor ou localhost = 5000
-const PORT = process.env.PORT || 4201
+const PORT = process.env.PORT || 4202
 const msg_PORT = `Servidor Node.JS para QUEST FATEC disponível via porta ${PORT}!`
 
 app.use(sessions({

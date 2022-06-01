@@ -51,6 +51,13 @@
 
         <h2> Lista de Perguntas Registradas no Jogo </h2>
 
+        <span class="filtroaplicado">Filtrar por Categoria:</span> 
+            <select name="categoria" id="categoriaFiltro" class="filtroaplicado"></select>
+            <input type="button" value="APLICAR FILTRO" class="filtroaplicado" onclick="aplicarfiltroperguntas()"></input>
+            <span id="filtroOculto" style="display:none">Filtrado por </span> 
+            <input id="filtroBtnOculto" type="button" value="LIMPAR FILTRO" onclick="limparfiltroperguntas()" style="display:none" ></input>
+            <br><br>
+
         <table id="listaPerguntas">
             <tr>
                 <th>ID</th>
@@ -125,6 +132,7 @@
                     }
                     //console.log("Acho que deu certo: ", categoriasObjdelta)
                     listarCategorias('categoriaNova')
+                    listarCategorias('categoriaFiltro')
                 },
                 error: (xhr) => {
                     alert(xhr.status, ":", xhr.responseText)
@@ -135,15 +143,13 @@
         }
         
         listaDelta()
-        
-
 
         //Buscar e listar todas as perguntas registradas
         async function listarPerguntas(perguntas) {
             versao_pergunta = perguntas.__v +1
 
             recebido =`
-                <tr class='perguntaLista' id='tr_${perguntas._id}'>
+                <tr class='${perguntas.categoria}' id='tr_${perguntas._id}'>
                     <td>${perguntas._id}</td> 
                     <td>
                         <select name="categoria" id="categoriaNova_${perguntas._id}">
@@ -338,6 +344,45 @@
             }
         }
 
+        //Aplicar filtro de categoria na lista de perguntas
+        async function aplicarfiltroperguntas () {            
+            filtro = $(categoriaFiltro).val()
+            alert("Aplicando filtro: " + filtro)
+
+            categoriasVisiveis = categoriasObjdelta
+
+            for (i=0; i<categoriasVisiveis.length; i++) {
+                if(categoriasVisiveis[i] == filtro){
+                    categoriasVisiveis.splice(i, 1)
+                }
+            }
+
+            for (i=0; i<categoriasVisiveis.length; i++) {
+                filtrado = categoriasVisiveis[i]
+                const linhas = document.getElementsByClassName(filtrado)
+                for (const linha of linhas) {
+                    linha.style.display = 'none';
+                }
+            }
+
+            filtrado = categoriasVisiveis[i]
+            const objs = document.getElementsByClassName('filtroaplicado')
+            for (const obj of objs) {
+                obj.style.display = 'none';
+            }
+
+            filtroOculto.style.display = 'block'
+            filtroOculto.innerHTML = `Exibindo apenas resultados para categoria <strong>` + filtro + `</strong>:`
+
+            filtroBtnOculto.style.display = 'block'
+
+        }
+
+        //Limpar filtro de categoria na lista de perguntas
+        async function limparfiltroperguntas () {
+            alert("Limpando filtro...")
+            location.reload()
+        }
         
     </script>
 </html>
