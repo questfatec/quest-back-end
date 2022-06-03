@@ -1,24 +1,17 @@
 const express = require('express')
-//const { restart } = require('nodemon')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const authConfig = require('../config/auth.json')
 const Category = require('../models/categories')
-const colecaoCategoria = 'categories'
-const colecao = 'QuestQuestionv2'
-
-const { Router } = require('express');
+const authMiddleware = require('../middlewares/auth')
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 const uri = process.env.mongoDbURI
-const { route } = require('express/lib/application');
-const { ObjectID } = require('mongodb');
-const { isValidObjectId } = require('../database');
-const authMiddleware = require('../middlewares/auth')
 const bancodedados = 'QuestDB'
+const colecaoCategoria = 'categories'
+const colecao = 'QuestQuestionv2'
 
 
 const router = express.Router()
+
+router.use(authMiddleware)
 
 //Para Front - Tela de Super Admin para Categorias
 router.get('/', async (req, res) => {

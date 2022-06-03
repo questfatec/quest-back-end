@@ -1,11 +1,7 @@
-const { Router } = require('express');
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 const uri = process.env.mongoDbURI
-const { route } = require('express/lib/application');
-const { ObjectID } = require('mongodb');
-const { isValidObjectId } = require('../database');
 const authMiddleware = require('../middlewares/auth')
 const bancodedados = 'QuestDB'
 const colecao = 'QuestQuestionv2'

@@ -85,6 +85,7 @@ app.set('views', './views');
 // Static Files
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + 'public/css'))
+app.use('/src', express.static(__dirname + 'public/src'))
 
 // Definição das variáveis para criar a DOM para o JQuery funcionar com o EJS
 var jsdom = require("jsdom");
@@ -96,6 +97,7 @@ global.document = document;
 require('./controller/authController')(app)
 require('./controller/categoryController')(app)
 require('./controller/questionControllerV3')(app)
+require('./controller/paymentController')(app)
 
 //Criar a rota principal
 app.get('/', (req, res) => {
@@ -104,6 +106,10 @@ app.get('/', (req, res) => {
 
 app.get('/auth/new', (req, res) => {
     res.render('novologin');
+});
+
+app.get('/regras', (req, res) => {
+    res.render('regras');
 });
 
 http.listen(PORT, () => {

@@ -1,0 +1,49 @@
+<html>
+    <body>
+        <h1>Olá <%=nomeJogador%>, (que tal ser um Jogador VIP?! / Você é VIP!)</h1>
+        <p>Status do Jogador: VIP ou NÃO? (Tem que trazer essa info do BD)</p>
+        <hr>
+        <a href="/jogoV3/">Voltar ao Pré-lobby</a>
+        <div>
+            <div>
+                <h2>Qual a vantagem de ser um Jogador VIP?</h2>
+                <p>
+                    Como Jogador VIP você tem acesso a categorias de perguntas exclusivas (como questões de Vestibular) e acesso ao modo "jodador único".
+                    Compre o o Passe VIP para tornar-se um Jogador VIP.
+                </p>
+                <p> 
+                    Conheça nossa política de cancelamento do Passe VIP aqui.
+                </p>
+                <hr>
+                <h2>Comprar Passe VIP (Só aparecer se ainda não for jogador VIP)</h2>
+                <p> 
+                    Os passes são cobrados mensalmente na fatura do seu cartão de crédito e a renovação é automática.
+                </p>
+                <form>
+                    <label>Número do Cartão de Crédito:</label>
+                    <input id="ncc" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx">
+                    <br><br>
+                    <label>Expira em:</label>
+                    <input id="nccExpMes" type="tel" pattern="\d*" maxlength="2" placeholder="MM"> / 
+                    <input id="nccExpAno" type="tel" pattern="\d*" maxlength="2" placeholder="AA">
+                    <br><br>
+                    <label>Código de Segurança:</label>
+                    <input name="credit-cvc" class="cc-cvc" type="tel" pattern="\d*" maxlength="3" placeholder="XXX">
+                    <br><br>
+                    <input type="button" value="COMPRAR AGORA!">
+                </form>
+                <hr>
+                <h2>Cancelamento  (Só aparecer se já for jogador VIP?)</h2>
+                <p>
+                    Para cancelar seu Passe VIP, basta clicar em "Desabilitar cobrança recorrente".     
+                </p>
+                <input type="button" value="desabilitar cobrança recorrente">
+                <p>
+                    Você poderá desfrutar do seu Passe VIP até o último dia do mês em que desabilitar a cobrança recorrente.
+                    Após essa data será necessário comprar um novo Passe VIP, caso tenha interesse.
+                    Importante: Pode haver cobrança ainda no primeiro mês após o cancelamento, a depender da data de vencimento da fatura e do cancelamento.
+                </p>
+            </div>
+        </div> 
+    </body>
+</html>
