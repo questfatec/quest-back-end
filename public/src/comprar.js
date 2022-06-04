@@ -38,6 +38,7 @@ function alterarPerfil(reg) {
             } else {
                 alert("ERRO na hora de alterar o valor da sessio de VIP!")
             }
+            alert('Seu usuário foi atualizado. Você será desconectado para que o sistema considere o cancelamento. Por favor aguarde.')
         },
         error: function(xhr) {
             alert(xhr.status, ":", xhr.responseText)
