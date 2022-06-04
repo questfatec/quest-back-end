@@ -259,3 +259,9 @@
       ctx.fillText(tempo, 0, -250);
     }
   }
+
+  window.onunload = function () {
+    window.scrollTo(0, 0);
+  }
+
+  

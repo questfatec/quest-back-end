@@ -5,7 +5,7 @@ function comprar() {
     let mesHj = agora.getMonth()
 
     var regcompra = {
-        idUsuario : sessionStorage.getItem('_id'),
+        idUser : sessionStorage.getItem('_id'),
         dataUniversalCompra : agora.toISOString(),
         ncc : document.getElementById("ncc").value,
         nccExpMes : document.getElementById("nccExpMes").value,

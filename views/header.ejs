@@ -1,3 +1,16 @@
-<h1>Olá <%=nomeJogador%>, Bem Vindo!</h1>
-<p>Jogador VIP: <%=vip%></p>
+<h1>Olá <%=nomeJogador%>!</h1>
+<p>
+    Jogador VIP: 
+    
+    <strong>
+        <%=vip%>
+    </strong>
+
+    <% if(vip === "Não"){ %>
+        
+        &nbsp; &nbsp;
+        <a href="/pagamento/">COMPRAR PASSE VIP AGORA!</a>
+
+    <% } %>
+</p>
 <hr>
