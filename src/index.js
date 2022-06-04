@@ -100,7 +100,7 @@ require('./controller/questionControllerV3')(app)
 require('./controller/paymentController')(app)
 
 //Criar a rota principal
-app.get('/', (req, res) => {
+app.get('/login', (req, res) => {
     res.render('login');
 });
 
@@ -110,6 +110,10 @@ app.get('/auth/new', (req, res) => {
 
 app.get('/regras', (req, res) => {
     res.render('regras');
+});
+
+app.get('/', (req, res) => {
+    res.render('inicio');
 });
 
 http.listen(PORT, () => {
