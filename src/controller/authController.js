@@ -170,7 +170,7 @@ router.post('/authenticate', async(req, res) => {
     const user = await User.findOne( { email } ).select('+password')
 
     if(!user) {
-        return res.status(499).send({ error: 'Usuário não encontrado com base no e-mail informado.'})
+        return res.status(499).send({ error: 'Usuário não encontrado com base no e-mail informado. Por favor revisar e-mail e senha ou realize um novo cadastro.'})
     } else if (!await bcrypt.compare(password, user.password)){
         return res.status(498).send({ error: 'Senha Inválida.'})
     } else {

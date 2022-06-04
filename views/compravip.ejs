@@ -1,4 +1,5 @@
 <html>
+
     <body>
         <h1>Olá <%=nomeJogador%>, (que tal ser um Jogador VIP?! / Você é VIP!)</h1>
         <p>Status do Jogador: VIP ou NÃO? (Tem que trazer essa info do BD)</p>
@@ -20,17 +21,58 @@
                     Os passes são cobrados mensalmente na fatura do seu cartão de crédito e a renovação é automática.
                 </p>
                 <form>
-                    <label>Número do Cartão de Crédito:</label>
-                    <input id="ncc" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx">
-                    <br><br>
+                    <label>Número do cartão:</label>
+                    <input 
+                        id="ncc"
+                        type="tel" 
+                        inputmode="numeric" 
+                        pattern="[0-9\s]{13,19}" 
+                        autocomplete="cc-number" 
+                        maxlength="16" 
+                        placeholder="Número do cartão"
+                        required
+                    >
+                    <br><br> 
+                    <label>Nome impresso no cartão:</label>
+                    <input id="nccNome" type="text" placeholder="Nome impresso no cartão">
+                    <br><br> 
                     <label>Expira em:</label>
-                    <input id="nccExpMes" type="tel" pattern="\d*" maxlength="2" placeholder="MM"> / 
-                    <input id="nccExpAno" type="tel" pattern="\d*" maxlength="2" placeholder="AA">
+                    <select id="nccExpMes">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                    </select>
+                    /
+                    <select id="nccExpAno">
+                        <option>2022</option>
+                        <option>2023</option>
+                        <option>2024</option>
+                        <option>2025</option>
+                        <option>2026</option>
+                        <option>2027</option>
+                        <option>2028</option>
+                        <option>2029</option>
+                        <option>2030</option>
+                        <option>2031</option>
+                        <option>2032</option>
+                    </select>
                     <br><br>
                     <label>Código de Segurança:</label>
-                    <input name="credit-cvc" class="cc-cvc" type="tel" pattern="\d*" maxlength="3" placeholder="XXX">
+                    <input id="nccCvc" type="tel" pattern="\d*" maxlength="3" placeholder="XXX" size="3" required>
                     <br><br>
-                    <input type="button" value="COMPRAR AGORA!">
+                    <label>CPF do titular :</label>
+                    <input id="nccCPF" type="text" placeholder="XXX.XXX.XXX-XX" maxlength="11"  size="11" required>
+                    <br><br>
+                    <input type="button" value="COMPRAR AGORA!" onclick="comprar()">
                 </form>
                 <hr>
                 <h2>Cancelamento  (Só aparecer se já for jogador VIP?)</h2>
@@ -46,4 +88,74 @@
             </div>
         </div> 
     </body>
+
+    <script>
+
+        function comprar() {
+
+            let agora =  new Date()
+            let anoHj = agora.getFullYear()
+            let mesHj = agora.getMonth()
+
+            var regcompra = {
+                idUsuario : "usuário",
+                dataUniversalCompra : agora.toISOString(),
+                ncc : document.getElementById("ncc").value,
+                nccExpMes : document.getElementById("nccExpMes").value,
+                nccExpAno : document.getElementById("nccExpAno").value,
+                nccCvc : document.getElementById("nccCvc").value,
+                nccNome : document.getElementById("nccNome").value,
+                nccCPF : document.getElementById("nccCPF").value
+            }
+
+            function validar() {
+                //Testar se número do cartão foi preenchido
+                if (
+                        regcompra.ncc == "" || 
+                        regcompra.ncc.length < 15 ||
+                        regcompra.ncc < 3399999999999999 ||
+                        regcompra.ncc > 6599999999999999 
+                    ) {
+                    
+                        alert("Por favor informe um número de cartão de crédito válido!")
+
+                } else if (regcompra.nccNome == "") {
+
+                    alert("Por favor informe o nome como está no cartão de crédito!")
+
+                } else if (regcompra.nccExpAno < anoHj || (regcompra.nccExpAno = anoHj && regcompra.nccExpMes < mesHj )) {
+
+                    alert("Parece que o cartão de crédito já venceu. Por favor revise os dados e tente novamente.")
+
+                } else if (
+                        regcompra.nccCvc == "" ||
+                        regcompra.nccCvc.length < 3 || 
+                        regcompra.nccCvc < 1
+                    ) {
+
+                    alert("Por favor informe o código de segurança do cartão de crédito!")
+
+                } else if (
+                        regcompra.nccCPF == "" ||
+                        regcompra.nccCPF.length < 11 || 
+                        regcompra.nccCPF < 1000000
+                    ) {
+
+                    alert("Por favor informe o CPF associado ao cartão de crédito!")
+
+                } else {
+
+                    alert("Agora só falta o ID do usuário")
+
+                    console.log(regcompra)
+                }
+            }
+
+            validar()
+            //console.log(req.session)
+
+        }
+
+        
+    </script>
 </html>

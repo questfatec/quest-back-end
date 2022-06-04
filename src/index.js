@@ -2,7 +2,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const sessions = require('express-session');
-var session
 
 //Para usar bibilioteca Express
 const app = express()
@@ -86,6 +85,7 @@ app.set('views', './views');
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/src', express.static(__dirname + 'public/src'))
+app.use('/img', express.static(__dirname + 'public/img'))
 
 // Definição das variáveis para criar a DOM para o JQuery funcionar com o EJS
 var jsdom = require("jsdom");

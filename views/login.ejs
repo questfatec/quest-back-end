@@ -48,16 +48,18 @@
                             return chave
                         }, 'json')
                     .fail((erro) => {
+                            //console.log("Erro durante autenticação.")
                         if (typeof erro !== 'undefined') {
-                            console.log("Usuário Autenticado no front com Sucesso, esse é o token: ", user)
+                            //console.log("Tentou login com esse usuário: ", user)
+                            alert(erro.responseJSON.error)
                         } else {
                             console.log("Erro durante autenticação no front: ", erro.status, " - ", erro.responseJSON.error)
-                            alert("Usuário não encontrado com base no e-mail informado. Por favor revisar e-mail informado antes de tentar novamente.")
+                            alert(erro.responseJSON.error)
                             location.href="/"
                         }
                     }).done(async(retorno) => {
                         //console.log("Chave Pre-set: ", chave)
-                        console.log("Usuário Autenticado com Sucesso (done), esse é o token que veio do servidor ;) ==> ", retorno.token)
+                        //console.log("Usuário Autenticado com Sucesso (done), esse é o token que veio do servidor ;) ==> ", retorno.token)
                         location.href="/jogoV3/"
                     })
                 }

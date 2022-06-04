@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    VIP:{
+        type: Boolean,
+        default: false,
+    },
     __v:{
         type: Number,
         default: 0,
