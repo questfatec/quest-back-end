@@ -188,10 +188,14 @@ router.post('/authenticate', async(req, res) => {
         session.authorization = "Bearer " + generateToken({ id: user.id })
         session.username = user.name
         session.email = user.email
+        
+        session.vip = user.VIP
+
+        console.log(user)
 
         res.status(200).send({ 
             user, 
-            token: generateToken({ id: user.id })
+            token: generateToken({ id: user.id }) 
         })
     }
 })

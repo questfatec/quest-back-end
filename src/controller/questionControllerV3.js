@@ -12,17 +12,26 @@ router.use(authMiddleware)
 
 //Rota após o login - Desvio Super Admin
 router.get('/', async(req,res) => {
+    vip = req.session.vip
+
+    if(vip === true || vip === 'Sim') {
+        req.session.vip = 'Sim'
+    } else {
+        req.session.vip = 'Não'
+    }
+
+    vip = req.session.vip
+    nomeJogador = req.session.username
     emailJogador = req.session.email
     //console.log("emailJogador: ", emailJogador)
     auth = req.headers.authorization || req.body.authorization || req.session.authorization
-    nomeJogador = req.session.username
     //console.log("Token recebido no Servidor - question Controler 1: ", auth)
     console.log("Quem tentou jogar - question Controler 1: ", nomeJogador)
 
     if (emailJogador == "superadmin@superadmin") {
-        res.render('admin', {nomeJogador: nomeJogador, perfil: "SUPER ADMIN"})
+        res.render('admin', {nomeJogador: nomeJogador, vip: vip, perfil: "SUPER ADMIN"})
     } else {
-        res.render('prelobby', {nomeJogador: nomeJogador, perfil: "Jogador"})
+        res.render('prelobby', {nomeJogador: nomeJogador, vip: vip, perfil: "Jogador"})
     }
 })
 
@@ -265,7 +274,7 @@ router.get('/singleplayer', async(req,res) => {
 })
 
 router.get('/multiplayer', async(req,res) => {
-    res.render('jogo')
+    res.render('multiplayer')
 })
 
 module.exports = app => app.use('/jogoV3', router)

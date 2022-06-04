@@ -1,10 +1,8 @@
 <html>
 
     <body>
-        <h1>Olá <%=nomeJogador%>, (que tal ser um Jogador VIP?! / Você é VIP!)</h1>
-        <p>Status do Jogador: VIP ou NÃO? (Tem que trazer essa info do BD)</p>
-        <hr>
-        <a href="/jogoV3/">Voltar ao Pré-lobby</a>
+        <%- include('header'); %>
+        <%- include('voltar'); %> 
         <div>
             <div>
                 <h2>Qual a vantagem de ser um Jogador VIP?</h2>
@@ -34,7 +32,7 @@
                     >
                     <br><br> 
                     <label>Nome impresso no cartão:</label>
-                    <input id="nccNome" type="text" placeholder="Nome impresso no cartão">
+                    <input id="nccNome" type="text" value="<%=nomeJogador%>">
                     <br><br> 
                     <label>Expira em:</label>
                     <select id="nccExpMes">
@@ -98,7 +96,7 @@
             let mesHj = agora.getMonth()
 
             var regcompra = {
-                idUsuario : "usuário",
+                idUsuario : sessionStorage.getItem('_id'),
                 dataUniversalCompra : agora.toISOString(),
                 ncc : document.getElementById("ncc").value,
                 nccExpMes : document.getElementById("nccExpMes").value,
@@ -123,13 +121,13 @@
 
                     alert("Por favor informe o nome como está no cartão de crédito!")
 
-                } else if (regcompra.nccExpAno < anoHj || (regcompra.nccExpAno = anoHj && regcompra.nccExpMes < mesHj )) {
+                } else if (regcompra.nccExpAno <= anoHj && regcompra.nccExpMes <= mesHj +1  ) {
 
-                    alert("Parece que o cartão de crédito já venceu. Por favor revise os dados e tente novamente.")
+                    alert("Parece que o cartão de crédito já venceu ou irá expirar neste mês. Por favor verifique o ano informado e tente novamente.")
 
                 } else if (
                         regcompra.nccCvc == "" ||
-                        regcompra.nccCvc.length < 3 || 
+                        regcompra.nccCvc.length < 1 || 
                         regcompra.nccCvc < 1
                     ) {
 
@@ -145,8 +143,7 @@
 
                 } else {
 
-                    alert("Agora só falta o ID do usuário")
-
+                    alert("Agora só enviar e gravar no bd o registro e alterar o status do usuário para VIP!")
                     console.log(regcompra)
                 }
             }

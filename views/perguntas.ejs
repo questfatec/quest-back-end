@@ -1,0 +1,82 @@
+<div>
+    
+    <h2>
+        CATEGORIA DE PERGUNTAS: 
+            <select name="categoria" id="categoriaInicial"></select>
+        <button onclick="iniciar()">INICIAR JOGO AGORA ou PRÓXIMA PERGUNTA!</button>
+    </h2>
+</div>
+<hr>
+<div>
+    <h2>
+        PERGUNTAS (JOGO)
+    </h2>
+    
+    <div id="perguntaRodada">
+        <strong>Objetivo / Instrução:</strong>&nbsp;Para responder basta clicar na opção desejada.</span>
+        <br>
+        <strong>Categoria:</strong>&nbsp;<span id="perguntaRodada_categoria"></span>
+        <br>
+        <strong>Pergunta:</strong>&nbsp;<span id="perguntaRodada_pergunta"></span>
+        <br>
+        <ul>
+            <li id="ativoA" onclick="respostaValidar('#ativoA')">
+                <strong>Alternativa A:</strong>&nbsp;<span id="perguntaRodada_alternativaA"></span>
+            </li>
+            <li  id="ativoB" onclick="respostaValidar('#ativoB')">
+                <strong>Alternativa B:</strong>&nbsp;<span id="perguntaRodada_alternativaB"></span>
+            </li>
+            <li id="ativoC" onclick="respostaValidar('#ativoC')">
+                <strong>Alternativa C:</strong>&nbsp;<span id="perguntaRodada_alternativaC"></span>
+            </li>
+            <li id="ativoD" onclick="respostaValidar('#ativoD')">
+                <strong>Alternativa D:</strong>&nbsp;<span id="perguntaRodada_alternativaD"></span>
+            </li>
+        </ul>
+        
+        <strong>Dica:</strong>&nbsp;<span id="perguntaRodada_dica"></span>
+        <br>
+    </div>
+</div>
+<hr>
+<h2>
+    TABULEIRO - PLACEHOLDER/EM CONSTRUÇÃO
+</h2>
+<hr>
+<h3>
+    DADOS AUXILIARES - SERÃO OCULTOS ou REALOCADOS!
+</h3>
+<small>
+    <strong>Nome do Jogador:&nbsp;</strong><%=nomeJogador%>
+    <br>
+
+    <strong>Pontuação Desta Rodada:&nbsp;</strong>
+    <span id="pontuaçãoRodada"></span>
+    <br>
+
+    <strong>Rodada Atual (qtd perguntas respondidas):&nbsp;</strong>
+    <span id="atualRodada"></span>
+    <br>
+
+    <strong>Data e Hora de Início do Jogo:&nbsp;</strong>
+    <span id="dataInicioRodada"></span>
+    <br>
+
+    <strong>Data e Hora Atual:&nbsp;</strong>
+    <span id="dataAgora"></span>
+    <br>
+
+    <strong>Tempo Restante da Rodada Atual:&nbsp;</strong>
+    <span id="tempoRodada"></span>
+
+</small>
+        
+<script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous">
+</script>
+
+</script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+
+<script src="/src/questoes.js"></script>

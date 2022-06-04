@@ -154,9 +154,9 @@ var gameState = {
 io.on('connection', (socket) => {
     io.emit('gameTable', gameTable);
     io.emit('gameState', gameState);
-    console.log('new connection', socket.id);
+    console.log('Jogador Conectado', socket.id);
     msgRetorno = startPlayer( socket.id);
-    io.emit('chat message', 'new player ' + numberPlayers + ' ' + msgRetorno);
+    io.emit('chat message', 'Novo jogador ' + numberPlayers + ' ' + msgRetorno);
     console.log('new player ' + numberPlayers);
     socket.on('disconnect', () => {
         

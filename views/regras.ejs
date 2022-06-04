@@ -1,9 +1,7 @@
 <html>
     <body>
-        <h1>Olá <%=nomeJogador%>, Bem Vindo!</h1>
-        <p>Status do Jogador: VIP ou NÃO? (Tem que trazer essa info do BD)</p>
-        <hr>
-        <a href="/jogoV3/">Voltar ao Pré-lobby</a>
+        <%- include('header'); %>
+        <%- include('voltar'); %>
         <h2>Regras do Jogo</h2>
         <p>Quest é o jogo de perguntas e respostas da FATEC! O volume 3 traz novas perguntas, totalmente atualizadas e novos modos de jogo.
             São várias perguntas, divididas em 6 temas diferentes: sociedade, artes e entretenimento, variedades, ciência e tecnologia, mundo e esportes.
