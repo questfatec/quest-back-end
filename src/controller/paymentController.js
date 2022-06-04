@@ -9,10 +9,11 @@ const colecao = 'QuestQuestionv2'
 const colecaoCategoria = 'categories'
 
 const router = express.Router()
+router.use(authMiddleware)
 
 //Rota para comprar créditos.
 router.get('/', async(req,res) => {
-    res.render('compravip', {nomeJogador: req.session.username, vip: req.session.vip})
+    res.render('vip', {nomeJogador: req.session.username, vip: req.session.vip})
 })
 
 module.exports = app => app.use('/pagamento', router)

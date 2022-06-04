@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="/css/base.css">
+
+<%- include('header'); %>
+<%- include('voltar'); %> 
+<div>
+    <div>
+
+        <% if(vip === "Não"){ %>
+            
+            <%- include('vipVantagem'); %>  
+
+            <hr>
+
+            <%- include('vipComprar'); %> 
+
+        <% } else { %>
+
+            <%- include('vipCancelar'); %>
+            
+        <% } %>
+
+        <hr>
+
+        <%- include('vipPolitica'); %>
+        
+    </div>
+</div> 
+    
+<script src="/src/comprar.js"></script>

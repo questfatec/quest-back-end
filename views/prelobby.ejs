@@ -1,22 +1,25 @@
-<html>
-    <body>
-        <%- include('header'); %>
 
-        <div id="listaPerguntas">
-            <ul>
-                <li>
-                    <a href="/jogoV3/singleplayer">JOGAR SOZINHO - Apenas para jogadores VIP</a>
-                </li>
-                <li>
-                    <a href="/jogoV3/multiplayer">JOGAR ONLINE - GRÁTIS - Entre 2 e 8 Jogadores</a>
-                </li>
-                <li>
-                    <a href="/pagamento/">COMPRAR PASSE VIP</a>
-                </li>
-                <li>
-                    <a href="/regras/">REGRAS</a>
-                </li>
-            </ul>
-        </div> 
-    </body>
-</html>
+<link rel="stylesheet" href="/css/base.css">
+<%- include('header'); %>
+
+<div id="listaPerguntas">
+    <ul>
+        <% if(vip === "Sim"){ %>
+        
+            <li>
+                <a href="/jogoV3/singleplayer">VIP - JOGAR SOZINHO - Apenas para jogadores VIP</a>
+            </li>
+
+        <% } %>
+
+        <li>
+            <a href="/jogoV3/multiplayer">GRÁTIS - Multiplayer (2 Jogadores)</a>
+        </li>
+        <li>
+            <a href="/pagamento/">COMPRAR PASSE VIP</a>
+        </li>
+        <li>
+            <a href="/regras/">REGRAS</a>
+        </li>
+    </ul>
+</div> 

@@ -1,0 +1,58 @@
+<h2>Comprar Passe VIP (Só aparecer se ainda não for jogador VIP)</h2>
+<p> 
+    Os passes são cobrados mensalmente na fatura do seu cartão de crédito e a renovação é automática.
+</p>
+<form>
+    <label>Número do cartão:</label>
+    <input 
+        id="ncc"
+        type="tel" 
+        inputmode="numeric" 
+        pattern="[0-9\s]{13,19}" 
+        autocomplete="cc-number" 
+        maxlength="16" 
+        placeholder="Número do cartão"
+        required
+    >
+    <br><br> 
+    <label>Nome impresso no cartão:</label>
+    <input id="nccNome" type="text" value="<%=nomeJogador%>">
+    <br><br> 
+    <label>Expira em:</label>
+    <select id="nccExpMes">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+    </select>
+    /
+    <select id="nccExpAno">
+        <option>2022</option>
+        <option>2023</option>
+        <option>2024</option>
+        <option>2025</option>
+        <option>2026</option>
+        <option>2027</option>
+        <option>2028</option>
+        <option>2029</option>
+        <option>2030</option>
+        <option>2031</option>
+        <option>2032</option>
+    </select>
+    <br><br>
+    <label>Código de Segurança:</label>
+    <input id="nccCvc" type="tel" pattern="\d*" maxlength="3" placeholder="XXX" size="3" required>
+    <br><br>
+    <label>CPF do titular :</label>
+    <input id="nccCPF" type="text" placeholder="XXX.XXX.XXX-XX" maxlength="11"  size="11" required>
+    <br><br>
+    <input type="button" value="COMPRAR AGORA!" onclick="comprar()">
+</form>

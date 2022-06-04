@@ -1,32 +1,20 @@
+<link rel="stylesheet" href="/css/base.css">
 
-<body>
-  <%- include('header'); %>
-  <%- include('voltar'); %>
+<%- include('header'); %>
+<%- include('voltar'); %>
 
-  <br>
+<br>
 
-  <%- include('tabuleiro'); %>
-  
-  <br>
+<%- include('tabuleiro'); %>
 
-  <%- include('perguntas'); %>
+<br>
 
-  <br>
+<%- include('perguntas'); %>
 
-  <hr>
-  <h2>CHAT</h2>
+<br>
 
-  <div>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-  </div>
+<hr>
 
-  <br>
-
-
-</body>
-
+<%- include('chat'); %>
 
 <script src="/src/tabuleiro.js"></script>
