@@ -1,66 +1,72 @@
   // ****** socket connection code **********
 
+  //Iniciar socket io
   var socket = io();
 
-  var messages = document.getElementById('messages');
-  var form = document.getElementById('form');
-  var input = document.getElementById('input');
+  //Cria variáveis com a posição inicial dos peões
+  var posicaoRed = 0;
+  var posicaoBlue = 0;
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (input.value) {
-      socket.emit('chat message', input.value);
-      input.value = '';
-    }
-  });
+  //Define o valor da posição inicial
+  var posicao = 0;
 
-  socket.on('chat message', function (msg) {
-    var item = document.createElement('li');
-    item.textContent = msg;
-    messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
-  })
-
+  //Emite para todos os jogadores a casa em que o peão vermelho está agora
   socket.on('moveRed', function (casa) {
     posicaoRed = casa;
   })
-  // ****************************************
 
-  var posicaoRed = 0;
-  var posicaoBlue = 0;
-  var fichaAposta = [true, true, true, true, true];
+  //Emite para todos os jogadores a casa em que o peão vermelho está agora
+  socket.on('moveBlue', function (casa) {
+    posicaoBlue = casa;
+  })
 
+  //Define variável para exibição das fichas
+  var fichaAposta = [true, true, true, true, true]; 
+
+  //Define valor inicial do tempo
   var tempo = 15;
+
+  // ???
   var timerOn;
-  var posicao = 0;
+
+  //Guarda referência do Canvas em uma variável
   var canvas = document.getElementById("canvas");
+
+  //Guarda contexto do Canvas
   var ctx = canvas.getContext("2d");
+
+  //Desenho do canvas - tabuleiro na tela
   var radius = canvas.height / 2;
   ctx.translate(radius, radius);
   radius = radius * 0.90
 
+  //Par retornar V ou F se existir a ficha
   function checkFicha(ficha) {
     return !ficha;
   }
 
+  //Evento que acontece ao clicar na ficha
   canvas.addEventListener('click', (event) => {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+
+    let pontos
+
     for (var i = 0; i < 5; i++) {
       distance = Math.sqrt(Math.pow(x - (i * 130 + 240), 2) + Math.pow(y - 500, 2));
       if (distance < 50) {
         fichaAposta[i] = false;
         timerOn = setInterval(decTempo, 1000);
-        socket.emit('moveRed', posicaoRed + i + 1);
-        if (fichaAposta.every(checkFicha)) {
-          fichaAposta = [true, true, true, true, true];
-        }
-        drawClock();
+        iniciar(i+1)
+        //quando move ou não o peão
+
+        //drawClock();
       }
     }
   })
 
+  //???
   var gameTable;
   socket.on('gameTable', function (msg) {
     gameTable = msg;
@@ -72,6 +78,9 @@
 
   setInterval(drawClock, 1000);
   // drawClock();
+
+
+  //Função Principal ???
   function drawClock() {
     drawTabuleiro(ctx, radius);
     drawCasas(ctx, radius);
@@ -82,6 +91,8 @@
     drawTimer(ctx);
   }
 
+
+  //Função para desenhar o tabuleiro
   function drawTabuleiro(ctx, radius) {
     var grad;
 
@@ -104,6 +115,8 @@
     ctx.fill();
   }
 
+
+  //função para desenhar as casas do tabuleiro
   function drawCasas(ctx, radius) {
     var ang;
     var num;
@@ -151,6 +164,8 @@
     }
   }
 
+
+  //função para inicializar as casas no tabuleiro
   function drawPecas(ctx, radius) {
     posicaoCasaRed = posicaoRed * Math.PI / 15 + Math.PI + 0.08
     posicaoCasaBlue = posicaoBlue * Math.PI / 15 + Math.PI + 0.08
@@ -158,6 +173,8 @@
     drawPecaBlue(ctx, posicaoCasaBlue, radius * 0.9, radius * 0.02);
   }
 
+
+  ///função para inicializar o peão vermelho no tabuleiro
   function drawPecaRed(ctx, pos, length, width) {
     ctx.beginPath();
     ctx.lineWidth = width;
@@ -178,6 +195,8 @@
     ctx.rotate(-pos);
   }
 
+
+  ///função para inicializar o peão azul no tabuleiro
   function drawPecaBlue(ctx, pos, length, width) {
     ctx.beginPath();
     ctx.lineWidth = width;
@@ -198,6 +217,8 @@
     ctx.rotate(-pos);
   }
 
+
+  //Função para escrever para escolher fazer a aposta
   function drawText(ctx) {
     ctx.font = "55px arial";
     ctx.textBaseline = "middle";
@@ -206,6 +227,8 @@
     ctx.fillText("FAÇA SUA APOSTA!", 0, -150);
   }
 
+
+  //Função para escrever explicação do jogo
   function drawText2(ctx) {
     var a = 0;
     var b = 150;
@@ -222,6 +245,8 @@
       ctx.fillText(linhas[j], a, b + (j * lineheight));
   }
 
+
+  //Função para exibir as fichas
   function drawFichas(ctx) {
     ctx.font = "bold 30px arial";
     for (var i = 0; i < 5; i++) {
@@ -240,6 +265,8 @@
       }
     }
   }
+
+  //Função para desenhar o timer na tela
   function drawTimer(ctx) {
     ctx.font = "bolder 45px Arial";
     ctx.textBaseline = "middle";
@@ -259,9 +286,3 @@
       ctx.fillText(tempo, 0, -250);
     }
   }
-
-  window.onunload = function () {
-    window.scrollTo(0, 0);
-  }
-
-  

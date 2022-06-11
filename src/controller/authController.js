@@ -191,7 +191,7 @@ router.post('/authenticate', async(req, res) => {
         
         session.vip = user.VIP
 
-        console.log(user)
+        //console.log(user)
 
         res.status(200).send({ 
             user, 

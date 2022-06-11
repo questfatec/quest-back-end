@@ -26,7 +26,7 @@ router.get('/', async(req,res) => {
     //console.log("emailJogador: ", emailJogador)
     auth = req.headers.authorization || req.body.authorization || req.session.authorization
     //console.log("Token recebido no Servidor - question Controler 1: ", auth)
-    console.log("Quem tentou jogar - question Controler 1: ", nomeJogador)
+    console.log("LOGIN: ", nomeJogador)
 
     if (emailJogador == "superadmin@superadmin") {
         res.render('admin', {nomeJogador: nomeJogador, vip: vip, perfil: "SUPER ADMIN"})
@@ -86,7 +86,7 @@ router.post('/pergunta', async(req, res) => {
                         console.log("Erro ao tentar cadastrar nova pergunta!")
                         res.status(471).send("Impossível registrar essa pergunta. ID inválido! Tente outro ID. Use sempre números!")
                     } else {
-                        console.log("Pergunta cadastrada: ", confirmacao.insertedId)
+                        //console.log("Pergunta cadastrada: ", confirmacao.insertedId)
                         res.send("Pergunta cadastrada com sucesso!")
                     }
                     QuestDB.close(); 
@@ -112,7 +112,7 @@ router.get('/perguntas', async(req,res)=>{
 
 //READ - REGRA DE FRONT - ÚNICA PERGUNTA QUALQUER DESDE QUE AINDA NÃO RESPONDIDA DURANTE A SESSÃO
 //*** PARA SABER AS PERGUNTAS JÁ RESPONDIDAS, O FRONT PRECISA INFORMAR O ID DA PERGUNTA
-router.get('/pergunta', async(req,res) => {
+router.get('/pergunta', async(req,res) => { 
 
     //console.log("O que foi recebido-body: ", req.body)
     //console.log("O que foi recebido-query: ", req.query)
@@ -203,7 +203,7 @@ router.put('/pergunta', async(req, res) => {
     } else if (!req.body.info) {
         res.status(409).send("Falha do Cliente: Faltou informar a fonte")
     } else {
-        console.log("_id:", req.body._id)
+        //console.log("_id:", req.body._id)
 
         MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
             if (err) { 
@@ -232,7 +232,7 @@ router.put('/pergunta', async(req, res) => {
                         console.log("Erro ao tentar alterar pergunta: ", err)
                         res.status(410).send("Impossível alterar essa pergunta. Tente outro ID ou insulte o Bruno!")
                     } else {
-                        console.log("Pergunta alterada com sucesso: ",confirmacao)
+                        //console.log("Pergunta alterada com sucesso: ",confirmacao)
                         res.status(200).send("Pergunta alterada com sucesso.")
                     }
                     QuestDB.close(); 
@@ -245,7 +245,7 @@ router.put('/pergunta', async(req, res) => {
 //DELETE
 router.delete('/pergunta', async(req, res) => {
 
-    console.log("_id:", req.body._id)
+    //console.log("_id:", req.body._id)
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) { 
@@ -258,7 +258,7 @@ router.delete('/pergunta', async(req, res) => {
                     console.log("Erro ao tentar deletar pergunta: ", err)
                     res.status(462).send("Impossível deletar essa pergunta. Tente outro ID ou insulte o Bruno!")
                 } else if (confirmacao.deletedCount == 1) {
-                    console.log("Pergunta deletada com sucesso: ",confirmacao)
+                    //console.log("Pergunta deletada com sucesso: ",confirmacao)
                     res.status(200).send("Pergunta deletada com sucesso.")
                 } else {
                     res.status(463).send("Deu algum outro erro! Insulte o Bruno!")
@@ -273,8 +273,31 @@ router.get('/singleplayer', async(req,res) => {
     res.render('singleplayer')
 })
 
+//MULTIPLAYER 
+
+let qtdJogadores = 0
+
 router.get('/multiplayer', async(req,res) => {
-    res.render('multiplayer')
+
+    let corPeao
+
+    if (qtdJogadores < 3) {
+        qtdJogadores += 1
+
+        if (qtdJogadores == 1){
+            corPeao = 'Vermelho'
+        } else if (qtdJogadores == 2) {
+            corPeao = 'Azul'
+        } else {
+            corPeao = 'Observador'
+        }
+
+    } else {
+        res.send("Não autorizado!")
+    }
+
+    res.render('multiplayer', {corPeao: corPeao, qtdJogadores: qtdJogadores})
+
 })
 
 module.exports = app => app.use('/jogoV3', router)

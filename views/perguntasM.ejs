@@ -1,0 +1,41 @@
+
+<div>
+    <h2>
+        PERGUNTA
+    </h2>
+    
+    <div id="perguntaRodada">
+
+        CATEGORIA INICIAL: 
+        <select name="categoria" id="categoriaInicial"></select>
+        <!-- <button onclick="iniciar()">INICIAR JOGO AGORA ou PRÓXIMA PERGUNTA!</button> -->
+        <br>
+    
+        <strong>Categoria:</strong>&nbsp;<span id="perguntaRodada_categoria"></span>
+        <br>
+        <strong>Pergunta:</strong>&nbsp;<span id="perguntaRodada_pergunta"></span>
+        <br>
+        <ul>
+            <li id="ativoA" onclick="respostaValidar('#ativoA')">
+                <strong>Alternativa A:</strong>&nbsp;<span id="perguntaRodada_alternativaA"></span>
+            </li>
+            <li  id="ativoB" onclick="respostaValidar('#ativoB')">
+                <strong>Alternativa B:</strong>&nbsp;<span id="perguntaRodada_alternativaB"></span>
+            </li>
+            <li id="ativoC" onclick="respostaValidar('#ativoC')">
+                <strong>Alternativa C:</strong>&nbsp;<span id="perguntaRodada_alternativaC"></span>
+            </li>
+            <li id="ativoD" onclick="respostaValidar('#ativoD')">
+                <strong>Alternativa D:</strong>&nbsp;<span id="perguntaRodada_alternativaD"></span>
+            </li>
+        </ul>
+
+
+        
+        <strong>Dica:</strong>&nbsp;<span id="perguntaRodada_dica"></span>
+        <br>
+        <strong>Objetivo / Instrução:</strong>&nbsp;Para responder basta clicar na opção desejada.</span>
+        
+        <br>
+    </div>
+</div>

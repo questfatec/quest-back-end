@@ -11,3 +11,11 @@
         'Helvetica Neue', 
         sans-serif;
 }
+
+.jogo {
+    display: block;
+}
+
+.base {
+    display: flex;
+}

@@ -1,20 +1,28 @@
 <link rel="stylesheet" href="/css/base.css">
 
-<%- include('header'); %>
-<%- include('voltar'); %>
+<%- include('headerM'); %>
 
-<br>
+<div class="base">
+    <div class="jogo"><%- include('perguntasM'); %></div>
+    <div class="jogo">
+        <canvas id="canvas" width="1000rem" height="1000rem" style="background-color:#333"></canvas>
+    </div>
+</div>
 
-<%- include('tabuleiro'); %>
+<script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous">
+</script>
 
-<br>
+</script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
 
-<%- include('perguntas'); %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
 
-<br>
+<script type="text/javascript" src="/src/questoesM.js"></script>
 
-<hr>
+<script type="text/javascript" src="/src/tabuleiro.js"></script>
 
-<%- include('chat'); %>
+<script type="text/javascript" src="/src/jogadores.js"></script>
 
-<script src="/src/tabuleiro.js"></script>
+

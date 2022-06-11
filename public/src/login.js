@@ -2,6 +2,7 @@
 const botaoLogar = document.getElementById("entrarJogador")
 
 chave = null
+sessionStorage. clear()
 sessionStorage.setItem("authorization","")
 
 async function logar() {
@@ -32,11 +33,14 @@ async function logar() {
         }).done(async(retorno) => {
             //console.log("Chave Pre-set: ", chave)
             //console.log("Usuário Autenticado com Sucesso (done), esse é o token que veio do servidor ;) ==> ", retorno.token)
+
+            sessionStorage. removeItem('authorization')
             
             window.sessionStorage.setItem('_id', retorno.user._id);
             window.sessionStorage.setItem('username', retorno.user.name);
             window.sessionStorage.setItem('vip', retorno.user.VIP);
             window.sessionStorage.setItem('email', retorno.user.email);
+
             location.href="/jogoV3/"
         })
     }

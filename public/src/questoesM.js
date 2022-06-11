@@ -156,25 +156,36 @@ function novapergunta(requisicao){
     });
 }
 
-function iniciar() {
+function iniciar(pontos) {
+
+    window.sessionStorage.setItem('pontosPerguntaAtual', pontos);
+
     requisicao = {
         categoria: $('#categoriaInicial').val(),
         questoes_ja_respondidas: rodada.questoes_respondidas 
-    },
+    }
+    
     //console.log("Requisição: ", requisicao)
-   novapergunta(requisicao)
+
+    novapergunta(requisicao)
 }
 
 function respostaValidar(resposta) {
+
+    let pontosPerguntaAtual = window.sessionStorage.getItem('pontosPerguntaAtual');
+
     resposta = String($(resposta).attr("res"))
+    
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
         alert("CERTA RESPOSTA!")
 
         //Move peão vermelho se acertar resposta - falta controlar o peão azul
-        socket.emit('moveRed', posicaoRed + i + 1);
+        socket.emit('moveRed', posicaoRed + pontosPerguntaAtual);
+
         if (fichaAposta.every(checkFicha)) {
           fichaAposta = [true, true, true, true, true];
         }
+
     } else { 
         res = "RESPOSTA ERRADA! A resposta correta era " + String(rodada.perguntaRodada.respostaCorreta)
         res = res + ". Explicação do Jogo: " + String(rodada.perguntaRodada.info)
@@ -188,5 +199,5 @@ function respostaValidar(resposta) {
         questoes_ja_respondidas: rodada.questoes_respondidas 
     }
 
-    novapergunta(requisicao)
+    //novapergunta(requisicao)
 }

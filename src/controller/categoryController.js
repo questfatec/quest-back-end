@@ -101,7 +101,7 @@ router.put('/', async (req, res) => {
                             console.log("Erro ao tentar alterar categoria: ", err)
                             res.status(462).send("Impossível alterar essa categoria. Tente outro ID ou insulte o Bruno!")
                         } else if (confirmacao.updatedExisting = true ) {
-                            console.log("Categoria alterada com sucesso: ",confirmacao)
+                            //console.log("Categoria alterada com sucesso: ",confirmacao)
                             //res.status(200).send("Categoria alterada com sucesso. Falta alterar as perguntas!")
                             MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
                                 if (err) { 
@@ -116,7 +116,7 @@ router.put('/', async (req, res) => {
                                             console.log("Erro ao tentar atualizar as categorias das perguntas já existentes: ", err)
                                             res.status(462).send("Impossível alterar essa categoria. Tente outro ID ou insulte o Bruno!")
                                         } else if (confirmacao.acknowledged == true ) {
-                                            console.log("Categoria alterada com sucesso nas perguntas: ",confirmacao)
+                                            //console.log("Categoria alterada com sucesso nas perguntas: ",confirmacao)
                                             res.status(200).send("Categoria atualizada nas perguntas com sucesso.")
                                         } else {
                                             console.log("Categoria não foi atualizada nas perguntas com sucesso: ",confirmacao)
@@ -161,7 +161,7 @@ router.put('/', async (req, res) => {
 
 router.delete('/', async(req, res) => {
 
-    console.log("_id:", req.body._id)
+    //console.log("_id:", req.body._id)
 
     MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, QuestDB) {
         if (err) { 
@@ -174,7 +174,7 @@ router.delete('/', async(req, res) => {
                     console.log("Erro ao tentar deletar categoria: ", err)
                     res.status(462).send("Impossível deletar essa categoria. Tente outro ID ou insulte o Bruno!")
                 } else if (confirmacao.deletedCount == 1) {
-                    console.log("Categoria deletada com sucesso: ",confirmacao)
+                    //console.log("Categoria deletada com sucesso: ",confirmacao)
                     res.status(200).send("Categoria deletada com sucesso.")
                 } else {
                     res.status(463).send("Deu algum outro erro! Insulte o Bruno!")
