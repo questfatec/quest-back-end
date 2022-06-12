@@ -1,9 +1,12 @@
 <link rel="stylesheet" href="/css/base.css">
 
-<%- include('headerM'); %>
+<%- include('header'); %>
 
 <div class="base">
-    <div class="jogo"><%- include('perguntasM'); %></div>
+    <div class="jogo">
+        <%- include('jogadores'); %>
+        <%- include('perguntasM'); %>
+    </div>
     <div class="jogo">
         <canvas id="canvas" width="1000rem" height="1000rem" style="background-color:#333"></canvas>
     </div>

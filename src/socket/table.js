@@ -1,4 +1,7 @@
+//Inicializar o Socket IO
 const io = require("socket.io");
+
+//Importar constantes para o Multiplayer
 let {
   gameState,
   gameTable,
@@ -7,9 +10,10 @@ let {
   socketRed,
 } = require("./constants");
 
+//Inicializar jogador 
 function startPlayer(socketId) {
   numberPlayers += 1;
-  console.log("NOVO JOGADOR MULTIPLAYER CONECTADO - Quantidade de Jogadores agora: " + numberPlayers);
+  //console.log("NOVO JOGADOR MULTIPLAYER CONECTADO - Quantidade de Jogadores agora: " + numberPlayers);
  
   if (numberPlayers == 1) {
     socketRed = socketId
@@ -22,21 +26,24 @@ function startPlayer(socketId) {
   }
 }
 
+//Inicializar servidor socket
 function setupSocket(http) {
   const socketServer = io(http)
 
+  //Rotina após conexão entre cliente e servidor socket
   socketServer.on("connection", (socket) => {
 
-    //Ao entrar no jogo, inicializar o tabuleiro
-    socketServer.emit("gameTable", gameTable);
-    socketServer.emit("gameState", gameState);
-
-    //Guardar a cor do do peão quando quando um novo jogador entrar
+    //Inicializar jogador
     msgRetorno = startPlayer(socket.id);
 
     //Avisar que entrou jogador no Multiplayer
     socketServer.emit("qtdJogadores", numberPlayers);
-    
+
+    //Inicializar o tabuleiro ao conectar ao jogo Multiplaye
+    socketServer.emit("gameTable", gameTable);
+    socketServer.emit("gameState", gameState);
+
+    //Rotina quando jogador Multiplayer desconectar
     socket.on("disconnect", () => {
 
       numberPlayers -= 1;
