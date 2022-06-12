@@ -277,7 +277,7 @@ router.get('/singleplayer', async(req,res) => {
 
 router.get('/multiplayer', async(req,res) => {
 
-    res.render('multiplayer', {corPeao: "Teste", qtdJogadores: 0 })
+    res.render('multiplayer', {qtdJogadores: 0, nomeJogador: req.session.username })
 
 })
 

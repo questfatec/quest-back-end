@@ -11,8 +11,27 @@
   var posicao = 0;
 
   //Emite para todos os jogadores a casa em que o peão vermelho está agora
-  socket.on('qtdJogadores', function (numberPlayers) {
+  socket.on('qtdJogadores', function (numberPlayers, nameRed, nameBlue) {
+
+    //Atualizar quantidade de jogadores
     document.getElementById("qtdJogFront").innerText = numberPlayers
+    
+    //Atualizar nome com base na quantidade de jogadores
+
+    if (!nameRed) {
+      nameRed = document.getElementById("NomeJogador").innerText
+      //document.getElementById("jogadorUm").innerText = nameRed
+    } else {
+      document.getElementById("jogadorUm").innerText = nameRed
+    }
+
+    if (!nameBlue) {
+      nameBlue = document.getElementById("NomeJogador").innerText
+      //document.getElementById("jogadorDois").innerText = nameBlue
+    } else {
+      document.getElementById("jogadorDois").innerText = nameBlue
+    }
+
   })
 
   //Emite para todos os jogadores a casa em que o peão vermelho está agora

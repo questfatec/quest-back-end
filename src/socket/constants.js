@@ -46,6 +46,9 @@ const gameTable = {
 var numberPlayers = 0;
 var socketRed;
 var socketBlue;
+var namePlayers = []
+var nameRed;
+var nameBlue;
 
 var gameState = {
   posicaoRed: 0,
@@ -59,5 +62,8 @@ module.exports = {
   numberPlayers,
   socketRed,
   socketBlue,
+  namePlayers,
+  nameRed,
+  nameBlue,
   gameState,
 };
