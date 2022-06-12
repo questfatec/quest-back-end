@@ -9,15 +9,16 @@ let {
 
 function startPlayer(socketId) {
   numberPlayers += 1;
-  console.log("NOVO JOGADOR MULTIPLAYER - Quantidade de Jogadores agora: " + numberPlayers);
+  console.log("NOVO JOGADOR MULTIPLAYER CONECTADO - Quantidade de Jogadores agora: " + numberPlayers);
+ 
   if (numberPlayers == 1) {
-    socketRed = socketId;
-    return "Jogador Vermelho";
+    socketRed = socketId
+    return "Jogador Vermelho"
   } else if (numberPlayers == 2) {
-    socketBlue = socketId;
-    return "Jogador Azul";
+    socketBlue = socketId
+    return "Jogador Azul"
   } else {
-    return "Observador";
+    return "Observador"
   }
 }
 
@@ -26,13 +27,16 @@ function setupSocket(http) {
 
   socketServer.on("connection", (socket) => {
 
-    console.log("Novo Jogador Multiplayer Ativo: ", socket.id);
-
+    //Ao entrar no jogo, inicializar o tabuleiro
     socketServer.emit("gameTable", gameTable);
     socketServer.emit("gameState", gameState);
 
+    //Guardar a cor do do peão quando quando um novo jogador entrar
     msgRetorno = startPlayer(socket.id);
 
+    //Avisar que entrou jogador no Multiplayer
+    socketServer.emit("qtdJogadores", numberPlayers);
+    
     socket.on("disconnect", () => {
 
       numberPlayers -= 1;
@@ -56,12 +60,6 @@ function setupSocket(http) {
       socketServer.emit("moveBlue", casa);
     });
 
-    socket.on('qtdJogadores', function (qtdJogadores) {
-      qtdJogadores += 1
-      console.log("socket - qtd Jog: ". qtdJogadores)
-    })
-
-    
     //CHAT
     socketServer.emit("chat message", "Novo jogador: " + numberPlayers + " " + msgRetorno);
 

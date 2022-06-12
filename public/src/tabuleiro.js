@@ -11,6 +11,12 @@
   var posicao = 0;
 
   //Emite para todos os jogadores a casa em que o peão vermelho está agora
+  socket.on('qtdJogadores', function (numberPlayers) {
+    console.log("Quantidade Jogadores - FRONT: ", numberPlayers)
+    document.getElementById("qtdJogFront").innerText = numberPlayers
+  })
+
+  //Emite para todos os jogadores a casa em que o peão vermelho está agora
   socket.on('moveRed', function (casa) {
     posicaoRed = casa;
   })

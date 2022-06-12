@@ -275,28 +275,9 @@ router.get('/singleplayer', async(req,res) => {
 
 //MULTIPLAYER 
 
-let qtdJogadores = 0
-
 router.get('/multiplayer', async(req,res) => {
 
-    let corPeao
-
-    if (qtdJogadores < 3) {
-        qtdJogadores += 1
-
-        if (qtdJogadores == 1){
-            corPeao = 'Vermelho'
-        } else if (qtdJogadores == 2) {
-            corPeao = 'Azul'
-        } else {
-            corPeao = 'Observador'
-        }
-
-    } else {
-        res.send("Não autorizado!")
-    }
-
-    res.render('multiplayer', {corPeao: corPeao, qtdJogadores: qtdJogadores})
+    res.render('multiplayer', {corPeao: "Teste", qtdJogadores: 0 })
 
 })
 
