@@ -2,7 +2,8 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 const uri = process.env.mongoDbURI
-const authMiddleware = require('../middlewares/auth')
+const authMiddleware = require('../middlewares/auth');
+const { jogMult, jogOnline } = require('../socket/constants');
 const bancodedados = 'QuestDB'
 const colecao = 'QuestQuestionv2'
 
@@ -31,7 +32,13 @@ router.get('/', async(req,res) => {
     if (emailJogador == "superadmin@superadmin") {
         res.render('admin', {nomeJogador: nomeJogador, vip: vip, perfil: "SUPER ADMIN"})
     } else {
-        res.render('prelobby', {nomeJogador: nomeJogador, vip: vip, perfil: "Jogador"})
+        res.render('prelobby', {
+            nomeJogador: nomeJogador, 
+            vip: vip, 
+            perfil: "Jogador", 
+            jogOnline: jogOnline,
+            jogMult, jogMult
+        })
     }
 })
 

@@ -71,7 +71,7 @@ async function editar(idParaEditar) {
 
     console.log(novaCategoria)
 
-    /$.ajax({
+    $.ajax({
         url: "/categoria/",
         type: 'PUT',
         data: novaCategoria,

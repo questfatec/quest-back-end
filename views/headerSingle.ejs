@@ -1,0 +1,19 @@
+<h1>Olá <%=nomeJogador%>!</h1>
+
+    <a href="/jogoV3/">Voltar ao Pré-lobby</a>
+    &nbsp; &nbsp;
+
+    Jogador VIP: 
+    
+    <strong>
+        <%=vip%>
+    </strong>
+    
+    <% if(vip === "Não"){ %>
+        
+        &nbsp; &nbsp;
+        <a href="/pagamento/">COMPRAR PASSE VIP AGORA!</a>
+
+    <% } %>
+
+<hr>

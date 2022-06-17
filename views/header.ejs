@@ -16,4 +16,25 @@
 
     <% } %>
 
+    <br>
+
+    Quantidade de Jogadores Online: 
+    
+    <strong>
+        <span id="jogOnline">
+            <%=jogOnline%>
+        </span>
+    </strong>
+    <br>
+
+    Quantidade de Jogadores no Multiplayer: 
+    
+    <strong>
+        <span id="jogMult">
+            <%=jogMult%>
+        </span>
+    </strong>
+
 <hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+<script type="text/javascript" src="/src/game/start.js"></script>

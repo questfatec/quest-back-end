@@ -8,7 +8,7 @@ const app = express()
 
 const http = require('http').createServer(app);
 
-require("./socket/table")(http)
+require("./socket/startM")(http)
 
 //Para entender arquivos JSON  
 app.use(bodyParser.json())
@@ -79,6 +79,7 @@ app.set('views', './views');
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/src', express.static(__dirname + 'public/src'))
+app.use('/src/game', express.static(__dirname + 'public/src/game'))
 app.use('/img', express.static(__dirname + 'public/img'))
 
 // Definição das variáveis para criar a DOM para o JQuery funcionar com o EJS
@@ -88,10 +89,14 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
+//nova rota para jogo multiplayer
+require('./controller/gameController')(app)
+
 require('./controller/authController')(app)
 require('./controller/categoryController')(app)
 require('./controller/questionControllerV3')(app)
 require('./controller/paymentController')(app)
+
 
 //Criar a rota principal
 app.get('/login', (req, res) => {
