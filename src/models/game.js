@@ -41,6 +41,12 @@ const GameSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    qtdJogOnline: {
+        type: Number,
+    },
+    qtdJogMult: {
+        type: Number, 
+    },
     __v:{
         type: Number,
         default: 0,

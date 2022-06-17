@@ -6,6 +6,9 @@ const authMiddleware = require('../middlewares/auth');
 const { jogMult, jogOnline } = require('../socket/constants');
 const bancodedados = 'QuestDB'
 const colecao = 'QuestQuestionv2'
+const Game = require('../models/game')
+id = "62acb555489c4ada14c9f9dd"
+
 
 const router = express.Router()
 
@@ -32,12 +35,15 @@ router.get('/', async(req,res) => {
     if (emailJogador == "superadmin@superadmin") {
         res.render('admin', {nomeJogador: nomeJogador, vip: vip, perfil: "SUPER ADMIN"})
     } else {
+        const retorno = await Game.findOne({"_id": id})
+        qtdJogMult = retorno.qtdJogMult
+
         res.render('prelobby', {
             nomeJogador: nomeJogador, 
             vip: vip, 
             perfil: "Jogador", 
             jogOnline: jogOnline,
-            jogMult, jogMult
+            jogMult: qtdJogMult
         })
     }
 })

@@ -21,8 +21,8 @@ function iniciarMultiplayer() {
     if(client_jogMult < 0) {
         alert("Erro do Jogo! AVISE O BRUNO!")
     } else if (client_jogMult < 2) {
-        socket.emit('jogMultOn')
-        location.href="/game"
+        socket.emit('jogMultOn', sessionStorage.getItem('_id'))
+        
     } else {
         alert("Infelizmente já tem dois jogadores online! Por favor aguarde!")
     }

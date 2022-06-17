@@ -42,6 +42,7 @@ async function logar() {
             window.sessionStorage.setItem('email', retorno.user.email);
 
             location.href="/jogoV3/"
+            
         })
     }
 }
