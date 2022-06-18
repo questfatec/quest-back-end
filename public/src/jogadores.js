@@ -1,5 +1,5 @@
 var socket = io();
 
 socket.on('qtdJogadores', function (qtdJogadores) {
-    console.log(qtdJogadores)
+    console.log('SOCKET - qtdJogadores' , qtdJogadores)
 })

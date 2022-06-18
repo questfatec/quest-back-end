@@ -28,7 +28,7 @@ router.get('/multiplayer', async (req, res) => {
 	playerBluePosition = retorno.playerBluePosition
     playerBlueFirstCategory = retorno.playerBlueFirstCategory
 
-    console.log("teste req.session: ", req.session )
+    //console.log("teste req.session: ", req.session )
 
     let estado = {
         qtdJogadores: 0, 
@@ -151,7 +151,7 @@ async function logreg(req, res, status, corPeao) {
             qtdJogMult = retorno.qtdJogMult
             console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
             console.log("Jogador ",corPeao," Registrado!!!")
-            return res.send({retorno, corPeao})
+            return res.send({retorno, corPeao, qtdJogMult})
 
         } catch (err) {
             return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
@@ -181,7 +181,7 @@ async function logreg(req, res, status, corPeao) {
             qtdJogMult = retorno.qtdJogMult
             console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
             console.log("Jogador ",corPeao," Registrado!!!")
-            return res.send({retorno, corPeao})
+            return res.send({retorno, corPeao, qtdJogMult})
         } catch (err) {
             return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
         } 

@@ -14,8 +14,10 @@ function load(cat) {
         data: info, 
         success: (retorno) => {
             corPeao = retorno.corPeao
+            jogMult = retorno.qtdJogMult
             //console.log("Jogador LOGADO no DB: ", retorno)
             sessionStorage.setItem('corPeao', corPeao)
+            sessionStorage.setItem('qtdJogMult', jogMult)
             alert('Iniciando Multiplayer!')
             location.href = "/game/multiplayer"
         },

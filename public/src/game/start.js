@@ -22,23 +22,15 @@ if(corPeao == 'red') {
 document.getElementById('perguntaRodada_categoria').innerHTML = categoriaInicial
 
 
-
-/*
-
-var client_jogOnline = 0 , client_jogMult = 0
-
-socket.on('jogOnline', function(jogOnline) {
-    console.log('Qtd Jog Online: ', jogOnline.jogOnline)
-    /* document.getElementById('jogOnline').innerHTML = jogOnline.jogOnline
-    document.getElementById('jogOnline').value = jogOnline.jogOnline */
-    /*client_jogOnline = jogOnline.jogOnline
-})
+var jogMult = sessionStorage.getItem('qtdJogMult')
+socket.emit('jogMult', jogMult)
 
 socket.on('jogMult', function(jogMult) {
-    console.log('Qtd Jog Multiplayer: ', jogMult.jogMult)
+    console.log('SOCKET - Qtd Jog Multiplayer: ', jogMult.jogMult)
     document.getElementById('jogMult').innerHTML = jogMult.jogMult
     document.getElementById('jogMult').value = jogMult.jogMult
     client_jogMult = jogMult.jogMult
+    sessionStorage.setItem('qtdJogMult', jogMult.jogMult)
 })
 
 function iniciarMultiplayer() {
@@ -52,4 +44,5 @@ function iniciarMultiplayer() {
         alert("Infelizmente já tem dois jogadores online! Por favor aguarde!")
     }
     
-} */
+}
+
