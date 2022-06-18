@@ -14,6 +14,9 @@ const GameSchema = new mongoose.Schema({
     playerRedConnectedAt:{
         type: Date,
     },
+    playerRedFirstCategory:{
+        type: String,
+    },
     playerBlueId:{
         type: String,
     },
@@ -25,6 +28,9 @@ const GameSchema = new mongoose.Schema({
     },
     playerBlueConnectedAt:{
         type: Date,
+    },
+    playerBlueFirstCategory:{
+        type: String,
     },
     gameStartedAt:{
         type: Date,

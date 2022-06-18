@@ -8,8 +8,6 @@ const app = express()
 
 const http = require('http').createServer(app);
 
-require("./socket/startM")(http)
-
 //Para entender arquivos JSON  
 app.use(bodyParser.json())
 
@@ -89,9 +87,13 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
+//Socket - Tabuleiro
+require("./socket/startM")(http)
+
 //nova rota para jogo multiplayer
 require('./controller/gameController')(app)
 
+//rotas antigas, porém ainda usando
 require('./controller/authController')(app)
 require('./controller/categoryController')(app)
 require('./controller/questionControllerV3')(app)

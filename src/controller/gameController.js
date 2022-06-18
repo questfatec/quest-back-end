@@ -11,6 +11,20 @@ router.get('/', async (req, res) => {
     res.render('loadmultiplayer')
 })
 
+//pós-lobby -> Tabuleiro e Perguntas
+router.get('/multiplayer', async (req, res) => {
+
+    const retorno = await Game.findOne({"_id": id})
+    qtdJogMult = retorno.qtdJogMult
+
+    res.render('multiplayer', {
+        qtdJogadores: 0, 
+        nomeJogador: req.session.username,
+        jogMult: qtdJogMult,
+        corPeao: req.session.corPeao
+    })
+})
+
 //READ ALL
 router.get('/list', async (req, res) => {
     try {
@@ -55,22 +69,125 @@ router.delete('/register', async (req, res) => {
         // }
     })
 
+//Função para buscar hora atual
+var dataagora = new Date()
+
+function ajustaDataHoraParaBrasil() {
+    var dataISO = dataagora.toISOString();
+    var dataAno = dataISO.substr(0, 4);
+    var dataMes = dataISO.substr(5, 2) - 1;
+    var dataDia = dataISO.substr(8, 2);
+    var dataHoraBR = dataISO.substr(11, 2) - 6;
+    var dataMinBR = dataISO.substr(14, 2);
+    var dataBR = new Date(dataAno, dataMes, dataDia, dataHoraBR, dataMinBR, 0, 0);
+    return dataBR;
+}
+
+//Logar hora atual do Brasil quando o servidor for reiniciado
+var dataBR = ajustaDataHoraParaBrasil();
+console.log("Data Agora(Brasil): ", dataBR)
+
+
+
 //Função para registrar entrada ou saída do multiplayer
-async function logreg(req, res, status) {
+async function logreg(req, res, status, corPeao) {
     
     let pedido = req.body 
-    console.log("Pedido recebido: ", JSON.stringify(pedido))
+    console.log("Pedido de alteração de Jogador...")
 
-    try {
-        await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
+    const horaAgora = ajustaDataHoraParaBrasil()
+
+    //Determinar se o jogador é Vermelho ou Azul
+    if (corPeao == 'red') {
+        console.log("Iniciando registro de Jogador Vermelho - logreg...")
+        
+        try {
+        
+            await Game.updateOne(
+                { "_id" : id } ,
+                { "$set" : { 
+                    "playerRedId": pedido.playerId,
+                    "playerRedName": pedido.playerName,
+                    "playerRedPosition": 0,
+                    "playerRedConnectedAt": horaAgora,
+                    "playerRedFirstCategory": pedido.playerFirstCategory,
+                    "lastUpdate": horaAgora
+                }
+            })
+
+            await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
+    
+            const retorno = await Game.findOne({"_id": id})
+            qtdJogMult = retorno.qtdJogMult
+            console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
+            console.log("Jogador ",corPeao," Registrado!!!")
+            return res.send({retorno, corPeao})
+
+        } catch (err) {
+            return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
+        } 
+
+    } else if (corPeao == 'blue') {
+
+        console.log("Iniciando registro de Jogador Azul - logreg...")
+
+        try {
+        
+            await Game.updateOne(
+                { "_id" : id } ,
+                { "$set" : { 
+                    "playerBlueId": pedido.playerId,
+                    "playerBlueName": pedido.playerName,
+                    "playerBluePosition": 0,
+                    "playerBlueConnectedAt": horaAgora,
+                    "playerBlueFirstCategory": pedido.playerFirstCategory,
+                    "lastUpdate": horaAgora
+                }
+            })
+
+            await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
+    
+            const retorno = await Game.findOne({"_id": id})
+            qtdJogMult = retorno.qtdJogMult
+            console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
+            console.log("Jogador ",corPeao," Registrado!!!")
+            return res.send({retorno, corPeao})
+        } catch (err) {
+            return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
+        } 
+
+    } else if (corPeao == 'apagaTudo') {
+
+        console.log("Iniciando registro para zerar jogo - logreg...")
+        
+        await Game.updateOne(
+            { "_id" : id } ,
+            { "$set" : { 
+                "qtdJogMult": 0,
+                "playerRedId": null,
+                "playerRedName": null,
+                "playerRedPosition": 0,
+                "playerRedConnectedAt": null,
+                "playerRedFirstCategory": null,
+                "playerBlueId": null,
+                "playerBlueName": null,
+                "playerBluePosition": 0,
+                "playerBlueConnectedAt": null,
+                "playerBlueFirstCategory": null,
+                "lastUpdate": horaAgora
+            }
+        })
+        
         const retorno = await Game.findOne({"_id": id})
         qtdJogMult = retorno.qtdJogMult
-        //console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
+        console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
         return res.send(retorno)
 
-    } catch (err) {
-        return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
+    } else {
+        console.log("erro na hora de determinar a cor do peão.")
+        return res.status(400).send( {error: 'Falha - erro na hora de determinar a cor do peão.'} )
     }
+ 
 }
 
 //REGISTRA LOGIN
@@ -79,21 +196,23 @@ router.put('/login', async (req, res) => {
 
     const retorno = await Game.findOne({"_id": id})
     qtdJogMult = retorno.qtdJogMult
-    //console.log("Quantidade de Jogadores Multiplayer agora: ", qtdJogMult)
+    console.log("Quantidade de Jogadores Multiplayer agora: ", qtdJogMult)
     
     if(qtdJogMult == 0  || qtdJogMult == 1) {
-        //console.log("iniciando teste para verificar se sala não está lotada: ", qtdJogMult)
+        console.log("iniciando teste para verificar se sala não está lotada: ", qtdJogMult)
         if (qtdJogMult == 0) {
+            console.log("Iniciando rotina para Jogador Vermelho - Início")
             //rotina login player red
             try{
-                await logreg(req, res, 1)
+                await logreg(req, res, 1, 'red')
             } catch (err) {
                 return res.sendStatus(421)
             }
         } else {
+            console.log("Iniciando rotina para Jogador Azul - Início")
             // rotina login player blue
             try{
-                await logreg(req, res, 1)
+                await logreg(req, res, 1, 'blue')
             } catch (err) {
                 return res.sendStatus(421)
             }
@@ -143,6 +262,11 @@ router.put('/logout', async (req, res) => {
     }
 })
 
+
+//LIMPA JOGADORES LOGADOR -  PARA DESENVOLVIMENTO / MANUTENÇÃO
+router.put('/alterar', async(req, res) => {
+    await logreg(req, res, -1, "apagaTudo")
+})
 
 
 module.exports = app => app.use('/game', router)

@@ -1,7 +1,11 @@
-function load() {
+function load(cat) {
+
+    sessionStorage.setItem('categoriaInicial', cat)
 
     const info = {
-        "_id": sessionStorage.getItem('_id')
+        "playerId": sessionStorage.getItem('_id'),
+        "playerName": sessionStorage.getItem('username'),
+        "playerFirstCategory": sessionStorage.getItem('categoriaInicial')
     }
  
     $.ajax({
@@ -9,11 +13,14 @@ function load() {
         type: "PUT",
         data: info, 
         success: (retorno) => {
-            console.log("Jogador LOGADO no DB: ", retorno)
-            alert('login com sucesso...por favor aguarde!')
+            corPeao = retorno.corPeao
+            //console.log("Jogador LOGADO no DB: ", retorno)
+            sessionStorage.setItem('corPeao', corPeao)
+            alert('Iniciando Multiplayer!')
+            location.href = "/game/multiplayer"
         },
         error: (xhr) => {
-            //console.log("Não deu certo o registro do usuário: " + xhr.status + " " + xhr.statusText);
+            console.log("Não deu certo o registro do usuário: " + xhr.status + " " + xhr.statusText);
             alert("Infelizmente já há dois jogadores. Por favor aguarde.")
             location.href = "/jogoV3"
         }
@@ -22,7 +29,8 @@ function load() {
 
 function carregarMultiplayer(cat) {
     console.log('Categoria selecionada: ', cat)
-    load()
+
+    load(cat)
 }
 
 

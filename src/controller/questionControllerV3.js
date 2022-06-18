@@ -286,12 +286,5 @@ router.get('/singleplayer', async(req,res) => {
     res.render('singleplayer')
 })
 
-//MULTIPLAYER 
-
-router.get('/multiplayer', async(req,res) => {
-
-    res.render('multiplayer', {qtdJogadores: 0, nomeJogador: req.session.username })
-
-})
 
 module.exports = app => app.use('/jogoV3', router)

@@ -1,12 +1,12 @@
-var socket = io();
+/* var socket = io();
 
 var client_jogOnline = 0 , client_jogMult = 0
 
 socket.on('jogOnline', function(jogOnline) {
     console.log('Qtd Jog Online: ', jogOnline.jogOnline)
-    document.getElementById('jogOnline').innerHTML = jogOnline.jogOnline
-    document.getElementById('jogOnline').value = jogOnline.jogOnline
-    client_jogOnline = jogOnline.jogOnline
+    /* document.getElementById('jogOnline').innerHTML = jogOnline.jogOnline
+    document.getElementById('jogOnline').value = jogOnline.jogOnline */
+    /*client_jogOnline = jogOnline.jogOnline
 })
 
 socket.on('jogMult', function(jogMult) {
@@ -27,4 +27,4 @@ function iniciarMultiplayer() {
         alert("Infelizmente já tem dois jogadores online! Por favor aguarde!")
     }
     
-}
+} */
