@@ -6,13 +6,20 @@
     
     <div id="perguntaRodada">
 
-        CATEGORIA INICIAL: 
-        <select name="categoria" id="categoriaInicial"></select>
-        <!-- <button onclick="iniciar()">INICIAR JOGO AGORA ou PRÓXIMA PERGUNTA!</button> -->
+        <strong>SEU PEÃO:</strong>&nbsp; 
+        <span id="peaoFront">
+            <%=estado.corPeao%>
+        </span>
         <br>
     
-        <strong>Categoria:</strong>&nbsp;<span id="perguntaRodada_categoria"></span>
+        <strong>CATEGORIA:</strong>&nbsp;
+        <span id="perguntaRodada_categoria">
+            <%=estado.categoriaInicial%>
+        </span>
         <br>
+
+        <br>
+
         <strong>Pergunta:</strong>&nbsp;<span id="perguntaRodada_pergunta"></span>
         <br>
         <ul>

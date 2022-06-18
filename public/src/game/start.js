@@ -1,4 +1,29 @@
-/* var socket = io();
+var socket = io();
+
+let corPeao = sessionStorage.getItem('corPeao')
+let categoriaInicial = sessionStorage.getItem('categoriaInicial')
+
+if(corPeao == 'red') {
+
+    document.getElementById('jogadorUm').innerHTML = 'Entrou!'
+    document.getElementById('peaoFront').innerHTML = 'Vermelho'
+
+} else if (corPeao = 'blue') {
+
+    document.getElementById('jogadorUm').innerHTML = 'Entrou!'
+    document.getElementById('jogadorDois').innerHTML = 'Entrou!'
+    document.getElementById('peaoFront').innerHTML = 'Azul'
+
+} else {
+    alert('Você não devia estar aqui...')
+    location.href('/jogoV3')
+}
+
+document.getElementById('perguntaRodada_categoria').innerHTML = categoriaInicial
+
+
+
+/*
 
 var client_jogOnline = 0 , client_jogMult = 0
 

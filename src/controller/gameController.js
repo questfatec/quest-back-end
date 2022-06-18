@@ -15,14 +15,44 @@ router.get('/', async (req, res) => {
 router.get('/multiplayer', async (req, res) => {
 
     const retorno = await Game.findOne({"_id": id})
-    qtdJogMult = retorno.qtdJogMult
 
-    res.render('multiplayer', {
+    jogMult =  retorno.qtdJogMult,
+ 
+    playerRedId = retorno.playerRedId
+	playerRedName = retorno.playerRedName
+	playerRedPosition = retorno.playerRedPosition
+    playerRedFirstCategory = retorno.playerRedFirstCategory
+
+	playerBlueId = retorno.playerBlueId
+	playerBlueName = retorno.playerBlueName
+	playerBluePosition = retorno.playerBluePosition
+    playerBlueFirstCategory = retorno.playerBlueFirstCategory
+
+    console.log("teste req.session: ", req.session )
+
+    let estado = {
         qtdJogadores: 0, 
+
         nomeJogador: req.session.username,
-        jogMult: qtdJogMult,
-        corPeao: req.session.corPeao
-    })
+        categoriaInicial: "PENDENTE FRONT",
+
+        jogMult: jogMult,
+
+        playerRedId : playerRedId,
+        playerRedName : playerRedName,
+        playerRedPosition : playerRedPosition,
+        playerRedFirstCategory : playerRedFirstCategory,
+
+        playerBlueId : playerBlueId,
+	    playerBlueName : playerBlueName,
+	    playerBluePosition : playerBluePosition,
+        playerBlueFirstCategory : playerBlueFirstCategory,
+
+        currentTurn : retorno.currentTurn
+    }
+	
+
+    res.render('multiplayer', {estado})
 })
 
 //READ ALL
