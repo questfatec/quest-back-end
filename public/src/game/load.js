@@ -7,7 +7,7 @@ function load() {
     $.ajax({
         url:"/game/login",
         type: "PUT",
-        //data: info, 
+        data: info, 
         success: (retorno) => {
             console.log("Jogador LOGADO no DB: ", retorno)
             alert('login com sucesso...por favor aguarde!')

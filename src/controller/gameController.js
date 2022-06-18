@@ -1,7 +1,6 @@
 const express = require('express')
 const authMiddleware = require('../middlewares/auth')
 const Game = require('../models/game')
-
 id = "62acb555489c4ada14c9f9dd"
 
 const router = express.Router()
@@ -56,12 +55,17 @@ router.delete('/register', async (req, res) => {
         // }
     })
 
-
+//Função para registrar entrada ou saída do multiplayer
 async function logreg(req, res, status) {
     
+    let pedido = req.body 
+    console.log("Pedido recebido: ", JSON.stringify(pedido))
+
     try {
-        const retorno = await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
-        console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", retorno.qtdJogOnline)
+        await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
+        const retorno = await Game.findOne({"_id": id})
+        qtdJogMult = retorno.qtdJogMult
+        //console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
         return res.send(retorno)
 
     } catch (err) {
@@ -71,30 +75,28 @@ async function logreg(req, res, status) {
 
 //REGISTRA LOGIN
 router.put('/login', async (req, res) => {
+    console.log("Iniciando login...: ", req.body)
+
     const retorno = await Game.findOne({"_id": id})
     qtdJogMult = retorno.qtdJogMult
     //console.log("Quantidade de Jogadores Multiplayer agora: ", qtdJogMult)
     
-    if(qtdJogMult < 2  && qtdJogMult >= 0) {
-        console.log("iniciando teste: ", qtdJogMult)
-        if (qtdJogMult = 0) {
+    if(qtdJogMult == 0  || qtdJogMult == 1) {
+        //console.log("iniciando teste para verificar se sala não está lotada: ", qtdJogMult)
+        if (qtdJogMult == 0) {
             //rotina login player red
             try{
                 await logreg(req, res, 1)
             } catch (err) {
                 return res.sendStatus(421)
             }
-        } else if (qtdJogMult = 1) {
+        } else {
             // rotina login player blue
             try{
                 await logreg(req, res, 1)
             } catch (err) {
                 return res.sendStatus(421)
             }
-        } else {
-            msg = "erro ao tentar iniciar um jogador - já existem 2 online!"
-            console.log(msg)
-            return res.status(421).send(msg)
         }
     } else {
         //erro - mais que três jogadores!
@@ -105,7 +107,40 @@ router.put('/login', async (req, res) => {
 
 //REGISTRA LOGOUT
 router.put('/logout', async (req, res) => {
-    logreg(req, res, -1)
+    console.log("Iniciando logout...: ", req.body)
+
+    const retorno = await Game.findOne({"_id": id})
+    qtdJogMult = retorno.qtdJogMult
+    console.log("Quantidade de Jogadores Multiplayer agora - LOGOUT: ", qtdJogMult)
+    
+    if(qtdJogMult == 2 || qtdJogMult == 1) {
+        console.log("iniciando teste para verificar se pode remover: ", qtdJogMult)
+        //Falta identificar quem está saindo (vermelho ou azul?)
+        if (qtdJogMult == 1) {
+
+            //rotina logout player red
+            try{
+                await logreg(req, res, -1)
+            } catch (err) {
+                return res.sendStatus(421)
+            }
+        } else if (qtdJogMult == 2) {
+            // rotina login player blue
+            try{
+                await logreg(req, res, -1)
+            } catch (err) {
+                return res.sendStatus(421)
+            }
+        } else {
+            msg = "erro ao tentar remover um jogador - Por favor verifique a quantidade de jogadores multiplayer e tente novamente."
+            console.log(msg)
+            return res.status(421).send(msg)
+        }
+    } else {
+        //erro - mais que três jogadores!
+        console.log("erro ao tentar iniciar um jogador - Quantidade de jogadores menor que 1 ou maior que 2")
+        return res.sendStatus(400)
+    }
 })
 
 
