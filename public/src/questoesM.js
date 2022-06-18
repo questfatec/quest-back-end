@@ -120,7 +120,7 @@ function iniciar(pontos) {
     window.sessionStorage.setItem('pontosPerguntaAtual', pontos);
 
     requisicao = {
-        categoria: $('#categoriaInicial').val(),
+        categoria: sessionStorage.getItem('categoriaInicial'),
         questoes_ja_respondidas: rodada.questoes_respondidas 
     }
     
