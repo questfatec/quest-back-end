@@ -1,3 +1,5 @@
+const session = require("express-session")
+
 function load(cat) {
 
     sessionStorage.setItem('categoriaInicial', cat)
@@ -15,9 +17,13 @@ function load(cat) {
         success: (retorno) => {
             corPeao = retorno.corPeao
             jogMult = retorno.qtdJogMult
+            posicaoRed = retorno.playerRedPosition
+            posicaoBlue = retorno.playerBluePosition
             //console.log("Jogador LOGADO no DB: ", retorno)
             sessionStorage.setItem('corPeao', corPeao)
             sessionStorage.setItem('qtdJogMult', jogMult)
+            sessionStorage.setItem('playerRedPosition', posicaoRed)
+            sessionStorage.setItem('playerBluePosition', posicaoBlue)
             alert('Iniciando Multiplayer!')
             location.href = "/game/multiplayer"
         },

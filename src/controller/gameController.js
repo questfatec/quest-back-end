@@ -149,9 +149,12 @@ async function logreg(req, res, status, corPeao) {
     
             const retorno = await Game.findOne({"_id": id})
             qtdJogMult = retorno.qtdJogMult
+            playerRedPosition = retorno.playerRedPosition
+            playerBluePosition = retorno.playerBluePosition
+            currentTurn = retorno.currentTurn
             console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
             console.log("Jogador ",corPeao," Registrado!!!")
-            return res.send({retorno, corPeao, qtdJogMult})
+            return res.send({retorno, corPeao, qtdJogMult, playerRedPosition, playerBluePosition, currentTurn})
 
         } catch (err) {
             return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
@@ -175,13 +178,15 @@ async function logreg(req, res, status, corPeao) {
                 }
             })
 
-            await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
-    
             const retorno = await Game.findOne({"_id": id})
             qtdJogMult = retorno.qtdJogMult
+            playerRedPosition = retorno.playerRedPosition
+            playerBluePosition = retorno.playerBluePosition
+            currentTurn = retorno.currentTurn
             console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
             console.log("Jogador ",corPeao," Registrado!!!")
-            return res.send({retorno, corPeao, qtdJogMult})
+            return res.send({retorno, corPeao, qtdJogMult, playerRedPosition, playerBluePosition, currentTurn})
+            
         } catch (err) {
             return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
         } 

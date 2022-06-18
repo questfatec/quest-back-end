@@ -131,15 +131,46 @@ function iniciar(pontos) {
 
 function respostaValidar(resposta) {
 
-    let pontosPerguntaAtual = window.sessionStorage.getItem('pontosPerguntaAtual');
+
+    let pontosPerguntaAtual = window.sessionStorage.getItem('pontosPerguntaAtual')
+    let playerRedPosition = window.sessionStorage.getItem('playerRedPosition');
+    let playerBluePosition = window.sessionStorage.getItem('playerBluePosition');
+    let corPeao = window.sessionStorage.getItem('corPeao');
 
     resposta = String($(resposta).attr("res"))
     
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
         alert("CERTA RESPOSTA!")
 
-        //Move peão vermelho se acertar resposta - falta controlar o peão azul
-        socket.emit('moveRed', posicaoRed + pontosPerguntaAtual);
+        if(corPeao == 'red') {
+            console.log('Posição Red: ', playerRedPosition)
+            console.log('pontosPerguntaAtual: ', pontosPerguntaAtual)
+
+            novoPonto = Number(pontosPerguntaAtual) + Number(playerRedPosition)
+
+            console.log("Nova posição - VERMELHO: ", novoPonto)
+
+            sessionStorage.setItem('playerRedPosition', novoPonto)
+
+            //Move peão vermelho se acertar resposta - falta controlar o peão azul
+            socket.emit('moveRed', novoPonto);
+
+        } else if (corPeao == 'blue') {
+            console.log('Posição Blue: ', playerBluePosition)
+            console.log('pontosPerguntaAtual: ', pontosPerguntaAtual)
+
+            novoPonto = Number(pontosPerguntaAtual) + Number(playerBluePosition)
+
+            console.log("Nova posição - AZUL: ", novoPonto)
+
+            sessionStorage.setItem('playerBluePosition', novoPonto)
+
+            //Move peão vermelho se acertar resposta - falta controlar o peão azul
+            socket.emit('moveBlue', novoPonto);
+        } else {
+            console.log("ERRO - MISERICÓRDIA")
+        }
+        
 
         if (fichaAposta.every(checkFicha)) {
           fichaAposta = [true, true, true, true, true];
