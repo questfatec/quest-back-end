@@ -58,14 +58,14 @@ const gameTable = {
       "fim",
     ],
     cores: {
-      início: "#19af54",
+      início: "#000",
       M: "#fd8f36",
       S: "#a745fb",
       E: "#8afd40",
       CT: "#31a6fc",
       AE: "#fc2c32",
       V: "#fcfd45",
-      fim: "#19af54",
+      fim: "#000",
     },
     categoriaAtual: [
       "Início",

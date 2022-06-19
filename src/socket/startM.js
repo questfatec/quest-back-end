@@ -1,5 +1,5 @@
 const io = require("socket.io");
-
+const Game = require('../models/game')
 let {
   jogOnline,
   jogMult,
@@ -66,6 +66,7 @@ function setupSocket(http) {
 
     //Inicializar jogador
     corPeaoJogador = startPlayer(socket.id);
+    console.log('SOCKET - Cor do Peão após iniciar: ', corPeaoJogador)
 
     //Aviso que o Jogador Azul entrou
     socket.on("avisaVermelhoQueAzulEntrou", (SocketIDAzul) => {
@@ -87,14 +88,62 @@ function setupSocket(http) {
       socketServer.emit("moveBlue", casa);
     });
 
-
+    //Rotina para desconexão do jogador
     socket.on("disconnect", (reason) => {
+
+      //Zerar tabela para poder reiniciar ou entrar no jogo multiplayer outra vez
+
+      async function logreg() {
+
+        //Função para buscar hora atual
+        var dataagora = new Date()
+
+        function ajustaDataHoraParaBrasil2() {
+          var dataISO = dataagora.toISOString();
+          var dataAno = dataISO.substr(0, 4);
+          var dataMes = dataISO.substr(5, 2) - 1;
+          var dataDia = dataISO.substr(8, 2);
+          var dataHoraBR = dataISO.substr(11, 2) - 6;
+          var dataMinBR = dataISO.substr(14, 2);
+          var dataBR = new Date(dataAno, dataMes, dataDia, dataHoraBR, dataMinBR, 0, 0);
+          return dataBR;
+        }
+    
+        const horaAgora = ajustaDataHoraParaBrasil2()
+    
+        console.log("Iniciando registro para zerar jogo - logreg...")
+        
+        await Game.updateOne(
+            { "_id" : id } ,
+            { "$set" : { 
+                "qtdJogMult": 0,
+                "playerRedId": null,
+                "playerRedName": null,
+                "playerRedPosition": 0,
+                "playerRedConnectedAt": null,
+                "playerRedFirstCategory": null,
+                "playerBlueId": null,
+                "playerBlueName": null,
+                "playerBluePosition": 0,
+                "playerBlueConnectedAt": null,
+                "playerBlueFirstCategory": null,
+                "lastUpdate": horaAgora
+            }
+        })
+        
+        const retorno = await Game.findOne({"_id": id})
+        qtdJogMult = retorno.qtdJogMult
+        console.log("ZERANDO - Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
+      }
+
+      logreg()
+
       //Avisar desconexão de jogadores
       jogOnline = socket.adapter.sids.size
       console.log("SOCKET - Jogador DESCONECTOU. Quantidade de jogadores online agora: ", jogMult);
       console.log("SOCKET - Motivo Jogador DESCONECTOU: ", reason)
       console.log("SOCKET - Quem desconectou: ", socket.id)
-      socketServer.emit('jogOnline', {jogOnline})
+      /* socketServer.emit('jogOnline', {jogOnline}) */
       console.log('SOCKET - Tentou avisar que jogador desconectou!')
 
       //Alterar quantidade de jogadores
@@ -112,7 +161,7 @@ function setupSocket(http) {
       }
 
       //Informar a todos sobre alteração na quantidade de jogadores
-      socketServer.emit("qtdJogadores", numberPlayers, namePlayers, nameRed, nameBlue);
+      /* socketServer.emit("qtdJogadores", numberPlayers, namePlayers, nameRed, nameBlue); */
 
     })
 

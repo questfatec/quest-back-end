@@ -14,8 +14,19 @@
 
 .jogo {
     display: block;
+    width: 500em;
 }
 
 .base {
-    display: flex;
+    display: block;
 }
+
+#canvas {
+    background-color:#fff; 
+    display: none;
+}
+
+#perguntasFront {
+    display: none;
+}
+

@@ -101,7 +101,7 @@ function setupSocket(http) {
       //Avisar desconexão de jogadores
       jogOnline = socket.adapter.sids.size
       console.log("SOCKET - Jogador DESCONECTOU. Quantidade de jogadores online agora: ", jogMult);
-      console.log("SOCKET - Motivo Jogador DESCONECTOU: ", reason)
+      console.log("SOCKET - Motivo Jogador : ", reason)
       console.log("SOCKET - Quem desconectou: ", socket.id)
       socketServer.emit('jogOnline', {jogOnline})
       console.log('SOCKET - Tentou avisar que jogador desconectou!')

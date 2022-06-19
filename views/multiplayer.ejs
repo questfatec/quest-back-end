@@ -7,11 +7,16 @@
 
 <div class="base">
     <div class="jogo">
-        <%- include('jogadores'); %>
-        <%- include('perguntasM'); %>
+        <div>
+            <%- include('jogadores'); %>
+        </div>
+        <div id="perguntasFront">
+            <%- include('perguntasM'); %>
+        </div>
     </div>
     <div class="jogo">
-        <canvas id="canvas" width="1000rem" height="1000rem" style="background-color:#333"></canvas>
+        <canvas id="canvas" width="1000em" height="1000em"></canvas>
+        <h3 id="avisoTabuleiro">POR FAVOR AGUARDE JOGADOR AZUL PARA COMEÇAR...</h3>
     </div>
 </div>
 

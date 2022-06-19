@@ -18,6 +18,13 @@ socket.on("connect", () => {
         document.getElementById('jogadorUm').innerHTML = 'Entrou!'
         document.getElementById('jogadorDois').innerHTML = 'Entrou!'
         document.getElementById('peaoFront').innerHTML = 'Azul'
+
+        //perguntasFront = document.getElementById('perguntasFront')
+        //perguntasFront.style.display = "Block"
+
+        canvas = document.getElementById('canvas')
+        canvas.style.display = "Block"
+
         socket.emit('avisaVermelhoQueAzulEntrou', ownSocketID)
 
     } else {
@@ -30,30 +37,39 @@ socket.on("connect", () => {
 
     //Código para avisar que Azul (Player 2) também entrou
     socket.on("avisaVermelhoQueAzulEntrou", function(ownSocketID) {
+        
+        avisoTabuleiro = document.getElementById('avisoTabuleiro')
+        avisoTabuleiro.style.display = "None"
+        
         if(corPeao == 'red') {
             console.log('SOCKET - FRONT - AVISO - Azul entrou também...', ownSocketID)
             document.getElementById('jogadorDois').innerHTML = 'Entrou!'
+            
+            //perguntasFront = document.getElementById('perguntasFront')
+            //perguntasFront.style.display = "Block"
 
-            $.ajax({
-                url:"/game/list",
-                type: "GET",
-                success: (retorno) => {
-                    jogMult = retorno[0].qtdJogMult
-                    console.log("teste JogMult: ", jogMult)
-                    sessionStorage.setItem('qtdJogMult', jogMult)
-                    document.getElementById('jogMult').innerHTML = jogMult
-
-                    console.log('Resultado Atualização do jogo: ', retorno[0])
-
-                },
-                error: (xhr) => {
-                    console.log("Não deu certo a consulta...: " + xhr.status + " " + xhr.statusText);
-                    alert("Não foi possível obter os dados do Jogador Azul...")
-                    location.href = "/jogoV3"
-                }
-            })
-
+            canvas = document.getElementById('canvas')
+            canvas.style.display = "Block"
         }
+
+        $.ajax({
+            url:"/game/list",
+            type: "GET",
+            success: (retorno) => {
+                jogMult = retorno[0].qtdJogMult
+                console.log("teste JogMult: ", jogMult)
+                sessionStorage.setItem('qtdJogMult', jogMult)
+                document.getElementById('jogMult').innerHTML = jogMult
+
+                console.log('Resultado Atualização do jogo: ', retorno[0])
+
+            },
+            error: (xhr) => {
+                console.log("Não deu certo a consulta...: " + xhr.status + " " + xhr.statusText);
+                alert("Não foi possível obter os dados do Jogador Azul...")
+                location.href = "/jogoV3"
+            }
+        })
 
         
     })
@@ -103,6 +119,10 @@ socket.on("connect", () => {
 
     //Evento que acontece ao clicar na ficha
     canvas.addEventListener('click', (event) => {
+
+        perguntasFront = document.getElementById('perguntasFront')
+        perguntasFront.style.display = 'block'
+
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
@@ -157,10 +177,10 @@ socket.on("connect", () => {
         ctx.fillStyle = 'white';
         ctx.fill();
 
-        grad = ctx.createRadialGradient(0, 0, radius * 0.95, 0, 0, radius * 1.05);
-        grad.addColorStop(0, '#333');
+        grad = ctx.createRadialGradient(0, 0, radius * 0.9, 0, 0, radius * 1.1);
+        grad.addColorStop(0, '#666');
         grad.addColorStop(0.5, 'white');
-        grad.addColorStop(1, '#333');
+        grad.addColorStop(1, '#666');
         ctx.strokeStyle = grad;
         ctx.lineWidth = radius * 0.1;
         ctx.stroke();
@@ -327,23 +347,30 @@ socket.on("connect", () => {
         ctx.font = "bolder 45px Arial";
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
+
         if (tempo > 10) {
-        ctx.fillStyle = "green";
+            ctx.fillStyle = "green";
         } else if (tempo > 5) {
-        ctx.fillStyle = "orange";
+            ctx.fillStyle = "orange";
         } else {
-        ctx.fillStyle = "red";
+            ctx.fillStyle = "red";
         }
+
         if (tempo == 0) {
-        ctx.fillText("Tempo Esgotado!", 0, -250);
-        tempo = 15;
-        clearInterval(timerOn);
+
+            ctx.fillText("Tempo Esgotado!", 0, -250);
+
+            //Fazer as perguntas sumirem
+            perguntasFront = document.getElementById('perguntasFront')
+            perguntasFront.style.display = 'none'
+
+            tempo = 15;
+            clearInterval(timerOn);
+
         } else {
-        ctx.fillText(tempo, 0, -250);
+            ctx.fillText(tempo, 0, -250);
         }
     }
-
-
 
 });
 

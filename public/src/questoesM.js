@@ -142,6 +142,10 @@ function respostaValidar(resposta) {
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
         alert("CERTA RESPOSTA!")
 
+        //Fazer as perguntas sumirem
+        perguntasFront = document.getElementById('perguntasFront')
+        perguntasFront.style.display = 'none'
+
         if(corPeao == 'red') {
             console.log('Posição Red: ', playerRedPosition)
             console.log('pontosPerguntaAtual: ', pontosPerguntaAtual)
@@ -177,6 +181,11 @@ function respostaValidar(resposta) {
         }
 
     } else { 
+        //Fazer as perguntas sumirem
+        perguntasFront = document.getElementById('perguntasFront')
+        perguntasFront.style.display = 'none'
+
+        //Informar a resposta correta
         res = "RESPOSTA ERRADA! A resposta correta era " + String(rodada.perguntaRodada.respostaCorreta)
         res = res + ". Explicação do Jogo: " + String(rodada.perguntaRodada.info)
         alert(res)

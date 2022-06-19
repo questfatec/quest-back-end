@@ -138,6 +138,8 @@ function carregaPergunta(pergunta) {
 }
 
 function novapergunta(requisicao){
+
+    //consultar pergunta
     $.ajax({
         url: "/jogoV3/pergunta",
         type: 'GET',
