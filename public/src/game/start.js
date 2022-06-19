@@ -83,7 +83,12 @@ socket.on("connect", () => {
             console.log('SOCKET - FRONT - Não consegui saber de quem era a vez...')
         }
 
-        
+        if (fichaAposta.every(checkFicha)) {
+            fichaAposta = [true, true, true, true, true];
+        }
+
+            //Define variável para exibição das fichas
+
     })
 
     /////// CÓDIGO TABULEIRO    
@@ -165,6 +170,7 @@ socket.on("connect", () => {
                     //iniciar rotina pergunta e informar quantos pontos valem a pergunta
                     iniciar(i+1)
                 }
+
             }
 
         } else {

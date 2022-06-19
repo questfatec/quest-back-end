@@ -134,6 +134,23 @@ function iniciar(pontos) {
 
 }
 
+
+const casasCat =
+['início',
+  'Mundo', 'Sociedade', 'Esportes', 'Ciência e Tecnologia',
+  'Artes e Entretenimento', 'Variedades', 'Esportes', 'Sociedade',
+  'Mundo', 'Ciência e Tecnologia', 'Sociedade', 'Variedades',
+  'Mundo', 'Artes e Entretenimento', 'Esportes', 'Mundo',
+  'Artes e Entretenimento', 'Variedades', 'Sociedade', 'Ciência e Tecnologia',
+  'Esportes', 'Mundo', 'Artes e Entretenimento', 'Variedades',
+  'Mundo', 'Sociedade', 'Esportes', 'Ciência e Tecnologia',
+  'fim']
+
+
+
+
+
+
 function respostaValidarM(resposta) {
 
 
@@ -158,8 +175,13 @@ function respostaValidarM(resposta) {
 
             sessionStorage.setItem('playerRedPosition', novoPonto)
 
+            novaCat = casasCat[novoPonto]
+            sessionStorage.setItem('categoriaInicial', novaCat)
+
+
             //Move peão vermelho se acertar resposta - falta controlar o peão azul
             socket.emit('moveRed', novoPonto);
+
 
         } else if (corPeao == 'blue') {
             console.log('Posição Blue: ', playerBluePosition)
@@ -169,14 +191,20 @@ function respostaValidarM(resposta) {
 
             console.log("Nova posição - AZUL: ", novoPonto)
 
+            novaCat = casasCat[novoPonto]
+            sessionStorage.setItem('categoriaInicial', novaCat)
+
             sessionStorage.setItem('playerBluePosition', novoPonto)
 
             //Move peão vermelho se acertar resposta - falta controlar o peão azul
             socket.emit('moveBlue', novoPonto);
+
+
         } else {
             console.log("ERRO - MISERICÓRDIA")
         }
         
+
 
     } else { 
 
@@ -188,6 +216,11 @@ function respostaValidarM(resposta) {
         //console.log("resposta correta: ", rodada.perguntaRodada.respostaCorreta)
     }
 
+    // if (fichaAposta.every(checkFicha)) {
+    //     fichaAposta = [true, true, true, true, true];
+    // }
+
+
     //Fazer as perguntas sumirem
     perguntasFront = document.getElementById('perguntasFront')
     perguntasFront.style.display = 'none'
@@ -196,11 +229,4 @@ function respostaValidarM(resposta) {
     //Passar a vez para o outro jogador
     socket.emit('passarRodadaParaOutro', corPeao);
 
-    //Colocar aqui rotina para saber qual a próxima categoria
-    /* requisicao = {
-        categoria: $('#categoriaInicial').val(),
-        questoes_ja_respondidas: rodada.questoes_respondidas 
-    } */
-
-    //novapergunta(requisicao) 
 }
