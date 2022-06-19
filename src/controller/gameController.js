@@ -175,8 +175,10 @@ async function logreg(req, res, status, corPeao) {
                     "playerBlueConnectedAt": horaAgora,
                     "playerBlueFirstCategory": pedido.playerFirstCategory,
                     "lastUpdate": horaAgora
-                }
-            })
+                }}
+            )
+
+            await Game.updateOne({"_id": id}, {$inc: { qtdJogMult: status}})
 
             const retorno = await Game.findOne({"_id": id})
             qtdJogMult = retorno.qtdJogMult
@@ -186,7 +188,7 @@ async function logreg(req, res, status, corPeao) {
             console.log("Quantidade de Jogadores no Multiplayer foi alterado, Atual:", qtdJogMult)
             console.log("Jogador ",corPeao," Registrado!!!")
             return res.send({retorno, corPeao, qtdJogMult, playerRedPosition, playerBluePosition, currentTurn})
-            
+
         } catch (err) {
             return res.status(400).send( {error: 'Falha - alteração na quantidade de jogadores não realizada: ', err} )
         } 

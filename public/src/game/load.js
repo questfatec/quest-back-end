@@ -1,4 +1,4 @@
-const session = require("express-session")
+
 
 function load(cat) {
 

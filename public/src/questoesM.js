@@ -148,7 +148,7 @@ function respostaValidar(resposta) {
 
             novoPonto = Number(pontosPerguntaAtual) + Number(playerRedPosition)
 
-            console.log("Nova posição - VERMELHO: ", novoPonto)
+            console.log("Nova posição - VERMELHO    : ", novoPonto)
 
             sessionStorage.setItem('playerRedPosition', novoPonto)
 

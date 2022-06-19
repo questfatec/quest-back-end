@@ -67,10 +67,19 @@ function setupSocket(http) {
     //Inicializar jogador
     corPeaoJogador = startPlayer(socket.id);
 
-    //Aviso que o Jogador Azul entrou
-    socket.on("avisaVermelhoQueAzulEntrou", (SocketIDAzul) => {
-      console.log('SOCKET - BACKEND - AVISO - Azul entrou também...', SocketIDAzul )
-      socketServer.emit("avisaVermelhoQueAzulEntrou", SocketIDAzul);
+    //Avisar conexão de jogadores
+    jogOnline++
+    console.log("SOCKET - Novo jogador CONECTOU. Quantidade de jogadores online agora: ", jogOnline);
+    socketServer.emit('jogOnline', {jogOnline})
+
+    //Receber info de Jogador entrou no Multiplayer
+    socket.on('jogMultOn', (idJogador) => {
+      //jogMult ++
+      jogMult.push(socket.id)
+      qtdJogMult = jogMult.length
+      //console.log("Novo jogador ENTROU NO MULTIPLAYER. Quantidade de jogadores no multiplayer agora: ", qtdJogMult);
+      //console.log("Novo jogador ENTROU NO MULTIPLAYER. Quantidade de jogadores Onliner agora: ", jogOnline);
+      //socketServer.emit('jogMult', {qtdJogMult})
     })
 
     //Inicializar o tabuleiro ao conectar ao jogo Multiplaye

@@ -3,11 +3,17 @@ const router = express.Router()
 const authMiddleware = require('../middlewares/auth')
 const User = require('../models/user')
 
+const Game = require('../models/game')
+id = "62acb555489c4ada14c9f9dd"
+
 router.use(authMiddleware)
 
 //Rota para comprar ou ver situação atual VIP e cancelar.
 router.get('/', async(req,res) => {
-    res.render('vip', {nomeJogador: req.session.username, vip: req.session.vip})
+    const retorno = await Game.findOne({"_id": id})
+    jogMult =  retorno.qtdJogMult,
+
+    res.render('vip', {nomeJogador: req.session.username, vip: req.session.vip, jogMult: jogMult})
 })
 
 

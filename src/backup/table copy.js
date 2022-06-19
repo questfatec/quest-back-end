@@ -1,8 +1,8 @@
+//Inicializar o Socket IO
 const io = require("socket.io");
 
+//Importar constantes para o Multiplayer
 let {
-  jogOnline,
-  jogMult,
   gameState,
   gameTable,
   numberPlayers,
@@ -11,9 +11,7 @@ let {
   nameBlue,
   socketBlue,
   socketRed,
-} = require('./constants')
-
-// OLD - SOCKET (NÃO APAGAR)
+} = require("./constants");
 
 //Inicializar jogador 
 function startPlayer(socketId) {
@@ -50,52 +48,27 @@ function startPlayer(socketId) {
   }
 }
 
-
-
-// NOVO - SOCKET
-
+//Inicializar servidor socket
 function setupSocket(http) {
-
   const socketServer = io(http)
 
   //Rotina após conexão entre cliente e servidor socket
   socketServer.on("connection", (socket) => {
 
-    console.log("SOCKET - Conexão Socket Ativa - ID:", socket.id)
-    //socket.adapter.sids.size
-
     //Inicializar jogador
     corPeaoJogador = startPlayer(socket.id);
 
-    //Aviso que o Jogador Azul entrou
-    socket.on("avisaVermelhoQueAzulEntrou", (SocketIDAzul) => {
-      console.log('SOCKET - BACKEND - AVISO - Azul entrou também...', SocketIDAzul )
-      socketServer.emit("avisaVermelhoQueAzulEntrou", SocketIDAzul);
-    })
+    console.log("Quantidade de Jogadores após inicializar o peão: ", numberPlayers)
+
+    //Avisar que entrou jogador no Multiplayer
+    socketServer.emit("qtdJogadores", numberPlayers, nameRed, nameBlue);
 
     //Inicializar o tabuleiro ao conectar ao jogo Multiplaye
     socketServer.emit("gameTable", gameTable);
     socketServer.emit("gameState", gameState);
 
-    //Mover o peão VERMELHO
-    socket.on("moveRed", (casa) => {
-      socketServer.emit("moveRed", casa);
-    });
-
-    //Mover o peão AZUL
-    socket.on("moveBlue", (casa) => {
-      socketServer.emit("moveBlue", casa);
-    });
-
-
-    socket.on("disconnect", (reason) => {
-      //Avisar desconexão de jogadores
-      jogOnline = socket.adapter.sids.size
-      console.log("SOCKET - Jogador DESCONECTOU. Quantidade de jogadores online agora: ", jogMult);
-      console.log("SOCKET - Motivo Jogador DESCONECTOU: ", reason)
-      console.log("SOCKET - Quem desconectou: ", socket.id)
-      socketServer.emit('jogOnline', {jogOnline})
-      console.log('SOCKET - Tentou avisar que jogador desconectou!')
+    //Rotina quando jogador Multiplayer desconectar
+    socket.on("disconnect", () => {
 
       //Alterar quantidade de jogadores
       numberPlayers -= 1;
@@ -114,11 +87,26 @@ function setupSocket(http) {
       //Informar a todos sobre alteração na quantidade de jogadores
       socketServer.emit("qtdJogadores", numberPlayers, namePlayers, nameRed, nameBlue);
 
-    })
+    });
 
-  })
+    //Mover o peão VERMELHO
+    socket.on("moveRed", (casa) => {
+      socketServer.emit("moveRed", casa);
+    });
 
+    //Mover o peão AZUL
+    socket.on("moveBlue", (casa) => {
+      socketServer.emit("moveBlue", casa);
+    });
+
+    //CHAT
+    /* socketServer.emit("chat message", "Novo jogador: " + numberPlayers + " " + corPeaoJogador);
+
+    socket.on("chat message", (msg) => {
+      socketServer.emit("chat message", msg);
+    }); */
+    
+  });
 }
-
 
 module.exports = setupSocket
