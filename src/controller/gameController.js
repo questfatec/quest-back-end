@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.render('loadmultiplayer')
 })
 
-//pós-lobby -> Tabuleiro e Perguntas
+//pós-lobby -> Iniciar Tabuleiro e Perguntas
 router.get('/multiplayer', async (req, res) => {
 
     const retorno = await Game.findOne({"_id": id})
@@ -55,7 +55,7 @@ router.get('/multiplayer', async (req, res) => {
     res.render('multiplayer', {estado})
 })
 
-//READ ALL
+//READ ALL GAMES
 router.get('/list', async (req, res) => {
     try {
         const allgames = await Game.find({})
@@ -304,6 +304,8 @@ router.put('/logout', async (req, res) => {
 router.put('/alterar', async(req, res) => {
     await logreg(req, res, -1, "apagaTudo")
 })
+
+
 
 
 module.exports = app => app.use('/game', router)

@@ -74,6 +74,22 @@ function setupSocket(http) {
       socketServer.emit("avisaVermelhoQueAzulEntrou", SocketIDAzul);
     })
 
+    socket.on("passarRodadaParaOutro", (quemPassou) => {
+      console.log("SERVIDOR - SOCKET - TESTE PASSA RODADA PARA OUTRO - QUEM PEDIU: ",quemPassou)
+      
+      let vezDeQuem
+      
+      if(quemPassou == 'blue') {
+        vezDeQuem = 'red'
+      } else if (quemPassou == 'red') {
+        vezDeQuem = 'blue'
+      } else {
+        console.log('ERRO - SOCKET - BACKEND - Erro ao tentar passar a vez - Cor do peão não identificada.')
+      }
+      
+      socketServer.emit("passarRodadaParaOutro", vezDeQuem)
+    })
+
     //Inicializar o tabuleiro ao conectar ao jogo Multiplaye
     socketServer.emit("gameTable", gameTable);
     socketServer.emit("gameState", gameState);

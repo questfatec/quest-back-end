@@ -10,17 +10,14 @@ socket.on("connect", () => {
 
     if(corPeao == 'red') {
 
-        document.getElementById('jogadorUm').innerHTML = 'Entrou!'
+        document.getElementById('jogadorUm').innerHTML = 'Entrou (Você)!'
         document.getElementById('peaoFront').innerHTML = 'Vermelho'
 
     } else if (corPeao = 'blue') {
 
         document.getElementById('jogadorUm').innerHTML = 'Entrou!'
-        document.getElementById('jogadorDois').innerHTML = 'Entrou!'
+        document.getElementById('jogadorDois').innerHTML = 'Entrou (Você)!'
         document.getElementById('peaoFront').innerHTML = 'Azul'
-
-        //perguntasFront = document.getElementById('perguntasFront')
-        //perguntasFront.style.display = "Block"
 
         canvas = document.getElementById('canvas')
         canvas.style.display = "Block"
@@ -44,9 +41,6 @@ socket.on("connect", () => {
         if(corPeao == 'red') {
             console.log('SOCKET - FRONT - AVISO - Azul entrou também...', ownSocketID)
             document.getElementById('jogadorDois').innerHTML = 'Entrou!'
-            
-            //perguntasFront = document.getElementById('perguntasFront')
-            //perguntasFront.style.display = "Block"
 
             canvas = document.getElementById('canvas')
             canvas.style.display = "Block"
@@ -70,6 +64,24 @@ socket.on("connect", () => {
                 location.href = "/jogoV3"
             }
         })
+
+        if(corPeao == 'blue') {
+            //avisar quem pediu para passar a vez
+            socket.emit("passarRodadaParaOutro", corPeao)
+        }
+        
+    })
+
+    //Código para controle da rodada no front
+    socket.on("passarRodadaParaOutro", (vezDeQuem) => {
+        console.log('Alteração - Quem Joga agora: ', vezDeQuem)
+        if(vezDeQuem == 'red') {
+            document.getElementById('quemJoga').innerHTML = "Vermelho"
+        } else if (vezDeQuem == 'blue') {
+            document.getElementById('quemJoga').innerHTML = "Azul"
+        } else {
+            console.log('SOCKET - FRONT - Não consegui saber de quem era a vez...')
+        }
 
         
     })
@@ -120,43 +132,63 @@ socket.on("connect", () => {
     //Evento que acontece ao clicar na ficha
     canvas.addEventListener('click', (event) => {
 
-        perguntasFront = document.getElementById('perguntasFront')
-        perguntasFront.style.display = 'block'
+        console.log('corPeao que clicou na ficha: ', corPeao)
+        vezDeQuem = document.getElementById('quemJoga').innerHTML
+        console.log('Vez de quem: ', vezDeQuem)
+        
+        if((vezDeQuem == 'Vermelho' && corPeao == 'red') || (vezDeQuem == 'Azul' && corPeao == 'blue')) {
+                
+            //Para descobrir em qual ficha clicou
 
-        const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+            //Referência da posição do click no Canvas (ONDE CLICOU)
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
 
-        let pontos
+            //Com a posição X/Y do click, identificar qual ficha deve ocultar
+            for (var i = 0; i < 5; i++) {
+                
+                //Limitar quando clicou na ficha ou não
+                distance = Math.sqrt(Math.pow(x - (i * 130 + 240), 2) + Math.pow(y - 500, 2));
+                
+                if (distance < 50) {
 
-        for (var i = 0; i < 5; i++) {
-        distance = Math.sqrt(Math.pow(x - (i * 130 + 240), 2) + Math.pow(y - 500, 2));
-        if (distance < 50) {
-            fichaAposta[i] = false;
-            timerOn = setInterval(decTempo, 1000);
-            iniciar(i+1)
-            //quando move ou não o peão
+                    //sumir com a ficha que clicou e inicar o tempo
+                    fichaAposta[i] = false;
 
-            //drawClock();
-        }
+                    //avisar que vai começar
+                    alert('HORA DA PERGUNTA...VOCÊ TEM 15 SEGUNDOS!')
+
+                    //ativar timer
+                    timerOn = setInterval(decTempo, 1000);
+
+                    //iniciar rotina pergunta e informar quantos pontos valem a pergunta
+                    iniciar(i+1)
+                }
+            }
+
+        } else {
+            aviso = "POR FAVOR AGUARDE SUA VEZ. Quem deve jogar agora é o " +vezDeQuem + "."
+            console.log(aviso)
+            alert(aviso)
         }
     })
 
-    //???
+    //Para começar a exibir os dados do tabuleiro com o que está vindo do backend
     var gameTable;
     socket.on('gameTable', function (msg) {
         gameTable = msg;
     })
 
+    //Função para reduzir o tempo
     function decTempo() {
         tempo = tempo - 1;
     }
 
+    //Frequência de atualização do tempo - 1000ms é 1s
     setInterval(drawClock, 1000);
-    // drawClock();
 
-
-    //Função Principal ???
+    //Função Mãe para desenhar o tabuleiro
     function drawClock() {
         drawTabuleiro(ctx, radius);
         drawCasas(ctx, radius);
@@ -371,6 +403,7 @@ socket.on("connect", () => {
             ctx.fillText(tempo, 0, -250);
         }
     }
+
 
 });
 

@@ -108,6 +108,10 @@ function novapergunta(requisicao){
         success: function(pergunta) {
             rodada.questoes_respondidas.push({_id:String(pergunta[0]._id)})
             carregaPergunta(pergunta[0])
+
+            //rotina para aparecer a pergunta
+            perguntasFront = document.getElementById('perguntasFront')
+            perguntasFront.style.display = 'block'
         },
         error: function(xhr) {
             alert(xhr.responseText)
@@ -127,9 +131,10 @@ function iniciar(pontos) {
     //console.log("Requisição: ", requisicao)
 
     novapergunta(requisicao)
+
 }
 
-function respostaValidar(resposta) {
+function respostaValidarM(resposta) {
 
 
     let pontosPerguntaAtual = window.sessionStorage.getItem('pontosPerguntaAtual')
@@ -138,14 +143,11 @@ function respostaValidar(resposta) {
     let corPeao = window.sessionStorage.getItem('corPeao');
 
     resposta = String($(resposta).attr("res"))
-    
+
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
         alert("CERTA RESPOSTA!")
 
-        //Fazer as perguntas sumirem
-        perguntasFront = document.getElementById('perguntasFront')
-        perguntasFront.style.display = 'none'
-
+        
         if(corPeao == 'red') {
             console.log('Posição Red: ', playerRedPosition)
             console.log('pontosPerguntaAtual: ', pontosPerguntaAtual)
@@ -176,14 +178,7 @@ function respostaValidar(resposta) {
         }
         
 
-        if (fichaAposta.every(checkFicha)) {
-          fichaAposta = [true, true, true, true, true];
-        }
-
     } else { 
-        //Fazer as perguntas sumirem
-        perguntasFront = document.getElementById('perguntasFront')
-        perguntasFront.style.display = 'none'
 
         //Informar a resposta correta
         res = "RESPOSTA ERRADA! A resposta correta era " + String(rodada.perguntaRodada.respostaCorreta)
@@ -193,10 +188,19 @@ function respostaValidar(resposta) {
         //console.log("resposta correta: ", rodada.perguntaRodada.respostaCorreta)
     }
 
-    requisicao = {
+    //Fazer as perguntas sumirem
+    perguntasFront = document.getElementById('perguntasFront')
+    perguntasFront.style.display = 'none'
+
+
+    //Passar a vez para o outro jogador
+    socket.emit('passarRodadaParaOutro', corPeao);
+
+    //Colocar aqui rotina para saber qual a próxima categoria
+    /* requisicao = {
         categoria: $('#categoriaInicial').val(),
         questoes_ja_respondidas: rodada.questoes_respondidas 
-    }
+    } */
 
-    //novapergunta(requisicao)
+    //novapergunta(requisicao) 
 }
