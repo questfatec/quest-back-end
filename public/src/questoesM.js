@@ -162,8 +162,9 @@ function respostaValidarM(resposta) {
     resposta = String($(resposta).attr("res"))
 
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
-        alert("CERTA RESPOSTA!")
-
+        //alert("CERTA RESPOSTA!")
+        new Audio('/audio/certo.mp3').play()
+    
         novoPonto = Number(pontosPerguntaAtual) + Number(playerRedPosition)
         
         if(corPeao == 'red') {
@@ -226,9 +227,13 @@ function respostaValidarM(resposta) {
     } else { 
 
         //Informar a resposta correta
+
+        new Audio('/audio/errado.mp3').play()
+        
         res = "RESPOSTA ERRADA! A resposta correta era " + String(rodada.perguntaRodada.respostaCorreta)
         res = res + ". Explicação do Jogo: " + String(rodada.perguntaRodada.info)
         alert(res)
+        
         //console.log("resposta dada: ", resposta)
         //console.log("resposta correta: ", rodada.perguntaRodada.respostaCorreta)
     }

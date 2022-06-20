@@ -75,6 +75,7 @@ app.set('views', './views');
 
 // Static Files
 app.use(express.static('public'))
+app.use('/audio', express.static(__dirname + 'public/audio'))
 app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/src', express.static(__dirname + 'public/src'))
 app.use('/src/game', express.static(__dirname + 'public/src/game'))

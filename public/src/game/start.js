@@ -69,6 +69,9 @@ socket.on("connect", () => {
             //avisar quem pediu para passar a vez
             socket.emit("passarRodadaParaOutro", corPeao)
         }
+
+        //new Audio('/audio/Entrada.mp3').play()
+        
         
     })
 
@@ -186,13 +189,16 @@ socket.on("connect", () => {
                     fichaAposta[i] = false;
 
                     //avisar que vai começar
-                    alert('HORA DA PERGUNTA...VOCÊ TEM 15 SEGUNDOS!')
+                    //alert('HORA DA PERGUNTA...VOCÊ TEM 15 SEGUNDOS!')
+
 
                     //ativar timer
                     timerOn = setInterval(decTempo, 1000);
 
                     //iniciar rotina pergunta e informar quantos pontos valem a pergunta
                     iniciar(i+1)
+
+                    new Audio('/audio/certaResposta.mp3').play()
                 }
 
             }
