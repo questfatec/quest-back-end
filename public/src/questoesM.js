@@ -164,23 +164,31 @@ function respostaValidarM(resposta) {
     if (resposta == rodada.perguntaRodada.respostaCorreta) {
         alert("CERTA RESPOSTA!")
 
+        novoPonto = Number(pontosPerguntaAtual) + Number(playerRedPosition)
         
         if(corPeao == 'red') {
             console.log('Posição Red: ', playerRedPosition)
             console.log('pontosPerguntaAtual: ', pontosPerguntaAtual)
 
             novoPonto = Number(pontosPerguntaAtual) + Number(playerRedPosition)
+                        
+            if(novoPonto<29) {
+                
+                sessionStorage.setItem('playerRedPosition', novoPonto)
+                novaCat = casasCat[novoPonto]
+                sessionStorage.setItem('categoriaInicial', novaCat)
 
-            console.log("Nova posição - VERMELHO    : ", novoPonto)
+            } else {
+                //rotina vencedor
+                novoPonto = 29
+                sessionStorage.setItem('playerRedPosition', novoPonto)
+                alert("Você ganhou!")
+                socket.emit('ganhador', corPeao)
+                location.href('/jogoV3/')
+            }
 
-            sessionStorage.setItem('playerRedPosition', novoPonto)
-
-            novaCat = casasCat[novoPonto]
-            sessionStorage.setItem('categoriaInicial', novaCat)
-
-
-            //Move peão vermelho se acertar resposta - falta controlar o peão azul
             socket.emit('moveRed', novoPonto);
+            console.log("Nova posição - VERMELHO    : ", novoPonto)
 
 
         } else if (corPeao == 'blue') {
@@ -189,15 +197,24 @@ function respostaValidarM(resposta) {
 
             novoPonto = Number(pontosPerguntaAtual) + Number(playerBluePosition)
 
-            console.log("Nova posição - AZUL: ", novoPonto)
+            if(novoPonto<29) {
+                
+                novaCat = casasCat[novoPonto]
+                sessionStorage.setItem('categoriaInicial', novaCat)
+                sessionStorage.setItem('playerBluePosition', novoPonto)
 
-            novaCat = casasCat[novoPonto]
-            sessionStorage.setItem('categoriaInicial', novaCat)
+            } else {
 
-            sessionStorage.setItem('playerBluePosition', novoPonto)
+                //rotina vencedor
+                novoPonto = 29
+                sessionStorage.setItem('playerBluePosition', novoPonto)
+                
+                socket.emit('ganhador', corPeao)
+                location.href('/jogoV3/')
+            }
 
-            //Move peão vermelho se acertar resposta - falta controlar o peão azul
             socket.emit('moveBlue', novoPonto);
+            console.log("Nova posição - AZUL (): ", novoPonto)
 
 
         } else {

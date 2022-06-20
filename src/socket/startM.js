@@ -104,6 +104,11 @@ function setupSocket(http) {
       socketServer.emit("moveBlue", casa);
     });
 
+    //Rotina Vencedor
+    socket.on('ganhador', (corPeao) => {
+      socketServer.emit('ganhador', corPeao)
+    })
+
     //Rotina para desconexão do jogador
     socket.on("disconnect", (reason) => {
 

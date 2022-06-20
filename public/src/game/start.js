@@ -83,13 +83,37 @@ socket.on("connect", () => {
             console.log('SOCKET - FRONT - Não consegui saber de quem era a vez...')
         }
 
+        corPeao = sessionStorage.getItem('corPeao')
+        if(vezDeQuem == corPeao) {
+            //alert('SUA VEZ DE JOGAR!')
+        } else {
+            //alert('Aguarde pelo outro jogador...')
+        }
+        
+
         if (fichaAposta.every(checkFicha)) {
             fichaAposta = [true, true, true, true, true];
         }
-
-            //Define variável para exibição das fichas
-
     })
+
+    //Código para avisar que o jogo acabou
+    socket.on('ganhador', (corPeao) => {
+        cliente = sessionStorage.getItem('corPeao') 
+        
+        if(cliente == corPeao) {
+            alert("VOCÊ VENCEU!")
+        } else {
+            alert("VOCÊ PERDEU!")
+        }
+
+        alert('Atenção, temos um vencedor...!')
+        alert("Redirecionando para o lobby, por favor aguarde.")
+        
+        location.href='/jogov3'
+
+        socket.disconnect()
+    })
+
 
     /////// CÓDIGO TABULEIRO    
     //Cria variáveis com a posição inicial dos peões
