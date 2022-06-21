@@ -1,0 +1,31 @@
+<h1>Olá <%=nomeJogador%>!</h1>
+
+    <a href="/jogoV3/">Voltar ao Pré-lobby</a>
+    &nbsp; &nbsp;
+
+    <br>
+
+    Jogador VIP: 
+    
+    <strong>
+        <%=vip%>
+    </strong>
+    
+    <% if(vip === "Não"){ %>
+        
+        &nbsp; &nbsp;
+        <a href="/pagamento/">COMPRAR PASSE VIP AGORA!</a>
+
+    <% } %>
+
+    <br>
+
+    Quantidade de Jogadores no Multiplayer: 
+    
+    <strong>
+        <span id="jogMult">
+            <%=jogMult%>
+        </span>
+    </strong>
+
+    <br><br>

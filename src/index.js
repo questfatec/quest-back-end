@@ -115,5 +115,5 @@ app.get('/regras', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.render('inicio');
+    res.render('loginNovo');
 });

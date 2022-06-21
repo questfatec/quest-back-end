@@ -1,13 +1,17 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
+<link rel="stylesheet" href="/css/bg.css">
 <link rel="stylesheet" href="/css/base.css">
+
 <%- include('header'); %>
 
 <div id="listaPerguntas">
-    <ul>
+    <ul class="w3-ul w3-border" style="width:50%">
 
         <% if(vip === "Sim"){ %>
         
-            <li>
+            <li class="w3-hover-red">
                 <a href="/jogoV3/singleplayer">VIP - JOGAR SOZINHO</a>
             </li>
 
@@ -15,7 +19,7 @@
         
             
         <% if(vip === "Não"){ %>
-            <li>
+            <li class="w3-hover-blue">
                 <a href="/pagamento/">COMPRAR PASSE VIP</a>
             </li>
         <% } %>
@@ -25,16 +29,16 @@
         </li>
 
         <% if(vip === "Sim"){ %>
-            <li>
+            <li class="w3-hover-green">
                 <a href="/pagamento/">Cancelar Passe VIP</a>
             </li>
         <% } %>
 
-        <li>
+        <li class="w3-hover-orange">
             <a href="/regras/">REGRAS</a>
         </li>
 
-        <li>
+        <li class="w3-hover-purple">
             <a href="/">SAIR</a>
         </li>
 

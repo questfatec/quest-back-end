@@ -12,6 +12,10 @@
         sans-serif;
 }
 
+html{
+    margin : 0.25em 1.5em
+}
+
 .jogo {
     display: block;
     width: 500em;
@@ -22,7 +26,6 @@
 }
 
 #canvas {
-    background-color:#fff; 
     display: none;
 }
 

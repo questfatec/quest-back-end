@@ -1,33 +1,40 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/css/base.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/bg.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
 
 
-<%- include('header'); %>
+    <%- include('headerMP'); %>
 
-<div class="base">
-    <div class="jogo">
-        <div>
-            <%- include('jogadores'); %>
+    <div class="base">
+        <div class="jogo">
+            <div>
+                <%- include('jogadores'); %>
+            </div>
+            <div id="perguntasFront">
+                <%- include('perguntasM'); %>
+            </div>
         </div>
-        <div id="perguntasFront">
-            <%- include('perguntasM'); %>
+        <div class="jogo">
+            <canvas id="canvas" width="1000em" height="1000em"></canvas>
+            <h3 id="avisoTabuleiro">POR FAVOR AGUARDE JOGADOR AZUL PARA COMEÇAR...</h3>
         </div>
     </div>
-    <div class="jogo">
-        <canvas id="canvas" width="1000em" height="1000em"></canvas>
-        <h3 id="avisoTabuleiro">POR FAVOR AGUARDE JOGADOR AZUL PARA COMEÇAR...</h3>
-    </div>
-</div>
 
-<script
-    src="https://code.jquery.com/jquery-3.6.0.js"
-    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-    crossorigin="anonymous">
-</script>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous">
+    </script>
 
-</script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+    </script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
 
-<script type="text/javascript" src="/src/questoesM.js"></script>
+    <script type="text/javascript" src="/src/questoesM.js"></script>
 
-<script type="text/javascript" src="/src/game/start.js"></script>
+    <script type="text/javascript" src="/src/game/start.js"></script>
+
+
+</html>
